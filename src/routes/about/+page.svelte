@@ -16,12 +16,12 @@
     <li>Cusotmizeable chances to include certain cards (like platinum/colony)</li>
     <li>Individual reroll (reroll any card in generated kingdom)</li>
     <li>Banned card list (never added to kingdoms)</li>
+    <li>Save data so it persists on page reload</li>
   </ul>
   
   <h2>Planned Features</h2>
   
   <ul>
-    <li>Save data so it persists on page reload</li>
     <li>Save presets of enabled sets</li>
     <li>Save history of played kingdoms and (optionally) effect weighting</li>
     <li>Choose random events, ways, landmarks, etc...</li>
@@ -32,6 +32,6 @@
 
 <style>
   .container {
-    max-width: 75%;
+    max-width: 85%;
   }
 </style>
