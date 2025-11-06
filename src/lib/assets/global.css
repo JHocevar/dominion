@@ -1,0 +1,95 @@
+:html {
+  --color-primary: #4caf50;
+  --color-primary-contrast: #ffffff;
+  --color-input-bg: #ffffff;
+  --color-input-focus: #4caf50;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+html[data-theme='light'] {
+  --bg: #ffffff;
+  --bg-lighter: #f5f5f5;
+  --text: #111827;
+  --muted: #6b7280;
+  --primary: #4caf50;
+}
+
+/* dark mode overrides applied when .dark is present on the root element */
+html[data-theme='dark'] {
+  --bg: #181A1B;
+  --bg-lighter: #0f010137;
+  --text: #d6dee6;
+  --muted: #9aa6b2;
+  --primary: #3fb24f;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* Shared button base */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn:disabled {
+  background-color: #999;
+  opacity: 0.5;
+  cursor: default;
+}
+
+.btn:not(:disabled):hover {
+  opacity: 0.9;
+  transform: scale(1.05);
+}
+
+/* Primary variant */
+.btn-primary {
+  background: var(--primary);
+  color: var(--color-primary-contrast);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+}
+
+/* Icon / small button variant */
+.btn-icon {
+  padding: 0.35rem;
+  border-radius: 50%;
+  background: transparent;
+}
+
+/* Shared input base */
+.input {
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  border: none;
+  background: var(--color-input-bg);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-size: 1rem;
+  color: var(--muted);
+}
+
+.input:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+}
+
+.input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-input-focus);
+  transform: translateY(-1px);
+}
