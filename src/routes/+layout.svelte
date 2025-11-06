@@ -166,7 +166,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 4rem;
+    margin-top: var(--header-height);
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 var(--spacing-base);
   }
 
   .theme-toggle {

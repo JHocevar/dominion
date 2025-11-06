@@ -37,7 +37,7 @@
         <div class={["button-group", showAdvanced ? "column" : "row"]}>
           {#if set.secondEdition}
             <button
-              class="btn btn-primary btn-settings"
+              class="btn btn-primary btn-settings btn-small"
               class:enabled={settingsState.sets[key].secondEditionEnabled}
               disabled={settingsState.sets[key].enabled === false}
               onclick={() => {
@@ -47,8 +47,8 @@
               }}
             >
               {settingsState.sets[key].secondEditionEnabled
-                ? "2nd Edition"
-                : "1st Edition"}
+                ? "2nd"
+                : "1st"}
             </button>
           {/if}
           <button
@@ -95,7 +95,7 @@
 {/if}
 
 <div class="item not-implemented">
-  <span> Platinum and Colony % per card </span>
+  <span> Platinum / Colony % per card </span>
   <input
     class="input not-implemented"
     disabled
@@ -104,7 +104,7 @@
   />
 </div>
 <div class="item not-implemented">
-  <span> Platinum and Colony % with 0 cards </span>
+  <span> Platinum / Colony % with 0 cards </span>
   <input
     class="input not-implemented"
     disabled
@@ -257,10 +257,10 @@
 
   .item {
     border: 1px solid #ccc;
-    font-size: 1.5rem;
+    font-size: var(--font-size-base);
     padding: 0.5rem;
     border-radius: 4px;
-    width: 80%;
+    width: var(--card-width);
     margin: 0.25rem 0;
     display: flex;
     flex-direction: row;
@@ -269,12 +269,17 @@
   }
 
   .btn-settings {
-    min-width: 100px;
+    min-width: 80px;
     background-color: #ff4444;
   }
 
   .btn-settings.enabled {
     background-color: #4caf50;
+  }
+
+  .btn-small {
+    width: 10px;
+    min-width: 40px;
   }
 
   .button-group {
@@ -295,7 +300,6 @@
   .icon-button {
     background: none;
     border: none;
-    font-size: 1.2rem;
     cursor: pointer;
     padding: 0.5rem;
     border-radius: 50%;
@@ -335,6 +339,11 @@
 
   .setting-row input {
     width: 80px;
+    max-width: 40%;
+  }
+
+  .item input {
+    max-width: 20%;
   }
 
   .item-header {

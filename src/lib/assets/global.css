@@ -1,9 +1,15 @@
-:html {
+html {
   --color-primary: #4caf50;
   --color-primary-contrast: #ffffff;
   --color-input-bg: #ffffff;
   --color-input-focus: #4caf50;
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
+  --font-size-base: 16px;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --spacing-base: 1rem;
+  --card-width: 600px;
+  --header-height: 4rem;
 }
 
 html[data-theme='light'] {
@@ -26,6 +32,8 @@ html[data-theme='dark'] {
 body {
   background: var(--bg);
   color: var(--text);
+  font-size: var(--font-size-base);
+  line-height: 1.5;
 }
 
 /* Shared button base */
@@ -39,6 +47,7 @@ body {
   cursor: pointer;
   font-weight: 600;
   transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
+  font-size: var(--font-size-base);
 }
 
 .btn:active {
@@ -79,7 +88,7 @@ body {
   background: var(--color-input-bg);
   box-shadow: var(--shadow-sm);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  font-size: 1rem;
+  font-size: var(--font-size-base);
   color: var(--muted);
 }
 
@@ -92,4 +101,34 @@ body {
   outline: none;
   box-shadow: 0 0 0 2px var(--color-input-focus);
   transform: translateY(-1px);
+}
+
+/* Mobile breakpoints */
+@media (max-width: 740px) {
+  html {
+    --font-size-base: 14px;
+    --font-size-lg: 1.15rem;
+    --font-size-xl: 1.25rem;
+    --spacing-base: 0.75rem;
+    --card-width: 85vw;
+    --header-height: 3rem;
+  }
+
+  h1 {
+    font-size: 1.35rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  .btn {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .input {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+  }
 }

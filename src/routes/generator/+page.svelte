@@ -24,7 +24,7 @@
     ]}
   >
     <div class="left">
-      <span>{card.Name}</span>
+      <span class="name">{card.Name}</span>
       <span class="set">{card.Set}</span>
     </div>
     <div class="right">
@@ -41,6 +41,7 @@
     font-size: 1.5rem;
     border-radius: 4px;
     width: 600px;
+    max-width: var(--card-width);
     margin: 0.25rem 0;
     display: flex;
     flex-direction: row;

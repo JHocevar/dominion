@@ -51,10 +51,10 @@
 <style>
   .card {
     border: 1px solid #ccc;
-    padding: 1rem;
+    padding: var(--spacing-base);
     border-radius: 4px;
-    width: 600px;
-    margin: 1rem 0;
+    width: var(--card-width);
+    margin: var(--spacing-base) 0;
     position: relative;
   }
 
