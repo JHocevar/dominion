@@ -1,26 +1,37 @@
+<script>
+import github from '$lib/assets/github-mark-white.svg'
+
+</script>
 <h1>About</h1>
 
 <div class="container">
   <p>
-    This app was created so I could customize how my dominion kingdoms were
-    generated. There were a couple features that I wanted such as the ability to
-    customize the chance of platinum and colonies being added that inspired this
-    app.
+    A simple, but very customizeable companion for the
+    <a href="https://www.riograndegames.com/games/dominion/">Dominion</a> card game.
+    Designed to be able so customize how cards are added to the kingdom supporting
+    all expansions
   </p>
-  
+
+  <div class="github">
+    <p>View the code on <a href="https://github.com/JHocevar/dominion">GitHub</a></p><img src={github} alt="github-logo"/>
+  </div>
+
+
   <h2>Implemented Features</h2>
-  
+
   <ul>
     <li>Card data source from dominion wiki</li>
     <li>Easily enable or disable sets from the available cards list</li>
-    <li>Cusotmizeable chances to include certain cards (like platinum/colony)</li>
+    <li>
+      Cusotmizeable chances to include certain cards (like platinum/colony)
+    </li>
     <li>Individual reroll (reroll any card in generated kingdom)</li>
     <li>Banned card list (never added to kingdoms)</li>
     <li>Save data so it persists on page reload</li>
   </ul>
-  
+
   <h2>Planned Features</h2>
-  
+
   <ul>
     <li>Save presets of enabled sets</li>
     <li>Save history of played kingdoms and (optionally) effect weighting</li>
@@ -33,5 +44,17 @@
 <style>
   .container {
     max-width: 85%;
+  }
+
+  .github {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  img {
+    width: 25px;
+    height: 25px;
+    margin-left: 1rem;
   }
 </style>

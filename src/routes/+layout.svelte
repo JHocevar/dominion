@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte"
   import "$lib/assets/global.css"
-  import favicon from "$lib/assets/favicon.svg"
+  import favicon from "$lib/assets/favicon.ico"
   import { page } from "$app/state"
 
   let { children } = $props()
@@ -78,6 +78,9 @@
     </li>
     <li class:active={page.url.pathname === "/about"}>
       <a href="/about" onclick={() => (isMenuOpen = false)}>About</a>
+    </li>
+    <li class:active={page.url.pathname === "/changelog"}>
+      <a href="/changelog" onclick={() => (isMenuOpen = false)}>Changelog</a>
     </li>
   </ul>
 </nav>
