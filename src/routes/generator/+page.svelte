@@ -3,7 +3,7 @@
   import { kingdomState } from "$lib/state/kingdom.svelte"
 </script>
 
-<h1>Dominion Kingdom Generator</h1>
+<h1>Kingdom Generator</h1>
 
 <button
   class="btn btn-primary"

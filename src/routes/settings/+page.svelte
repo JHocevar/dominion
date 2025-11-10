@@ -77,7 +77,7 @@
             />
           </div>
           <div class="setting-row">
-            <label for={`minCards-${key}`}>Minimum Cards:</label>
+            <label for={`minCards-${key}`}>Min Cards:</label>
             <input
               class="input"
               id={`minCards-${key}`}
@@ -210,7 +210,7 @@
 
 <style>
   .header-container {
-    width: 80%;
+    width: var(--card-width);
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -238,7 +238,6 @@
 
   .section-header h2 {
     margin: 0;
-    font-size: 1.5rem;
     color: var(--text);
   }
 
@@ -269,7 +268,7 @@
   }
 
   .btn-settings {
-    min-width: 80px;
+    min-width: 60px;
     background-color: #ff4444;
   }
 
@@ -319,7 +318,7 @@
 
   .advanced-settings {
     padding: 0.5rem;
-    margin-left: 1rem;
+    margin-left: .5rem;
     background: var(--bg-lighter);
     color: var(--text);
     border-radius: 8px;
@@ -338,8 +337,8 @@
   }
 
   .setting-row input {
-    width: 80px;
-    max-width: 40%;
+    width: 60px;
+    max-width: 30%;
   }
 
   .item input {

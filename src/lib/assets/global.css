@@ -10,6 +10,8 @@ html {
   --spacing-base: 1rem;
   --card-width: 600px;
   --header-height: 4rem;
+
+  font-family: 'Roboto', sans-serif;
 }
 
 html[data-theme='light'] {
@@ -112,14 +114,8 @@ body {
     --spacing-base: 0.75rem;
     --card-width: 85vw;
     --header-height: 3rem;
-  }
 
-  h1 {
-    font-size: 1.35rem;
-  }
-
-  h2 {
-    font-size: 1.25rem;
+    font-size: var(--font-size-base)
   }
 
   .btn {

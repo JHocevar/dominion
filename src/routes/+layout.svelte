@@ -58,9 +58,9 @@
 
   <button class="theme-toggle" aria-label="Toggle theme" onclick={toggleTheme}>
     {#if isDark}
-      ☀️
+      ☀
     {:else}
-      🌙
+      ☾⋆
     {/if}
   </button>
 </header>
@@ -111,11 +111,11 @@
   .hamburger span {
     width: 2rem;
     height: 0.25rem;
-    background: #333;
     border-radius: 10px;
     transition: all 0.3s linear;
     position: relative;
     transform-origin: 1px;
+    background: var(--text);
   }
 
   nav {
@@ -182,6 +182,7 @@
     cursor: pointer;
     padding: 1rem;
     border-radius: 6px;
+    color: var(--text);
   }
 
   .theme-toggle:hover {
