@@ -94,14 +94,17 @@ function getAvailableCards(): Card[] {
     allCards = allCards.filter(card => !card.Types.includes('Attack'))
   }
 
+  console.log("kingdom cards are: ", kingdomState.cards)
   return allCards.filter(
     (card) =>
       enabledSets.includes(card.Set) &&
-      !settingsState.bannedCards.includes(card.Name)
+      !settingsState.bannedCards.includes(card.Name) &&
+      !kingdomState.cards.some(c => c.Name === card.Name)
   )
 }
 
 export function rerollOneCard(card: Card): void {
+  console.log('logging cards')
   const availableCards = getAvailableCards().filter((c) => c.Name !== card.Name)
   const randomCard = getRandomCard(availableCards)
   const index = kingdomState.cards.findIndex((c) => c.Name === card.Name)

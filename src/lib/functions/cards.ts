@@ -54,10 +54,10 @@ export const nonSupplyCategory: string[] = [
 ]
 
 export const specialMultiStackCards: string[] = [
-  "Augur", // Allies, Rotating pile
-  "Fort", // Allies, Rotating pile
+  "Augur",  // Allies, Rotating pile
+  "Fort",   // Allies, Rotating pile
   "Wizard", // Allies, Rotating pile
-  "Clash", // Allies, Rotating pile
+  "Clash",  // Allies, Rotating pile
   "Knight", // Dark Ages, each knight is unique
   "Castle", // Empires, each castle is unique
 ]
@@ -69,7 +69,7 @@ export function loadAllCards(): Card[] {
     cast: (value, context) => {
       if (['Actions'].includes(context.column?.toString() || '')) {
         return value.replace('+', '')
-      } 
+      }
       return value
     }
   })
