@@ -28,7 +28,7 @@ type Set = {
 // Taken from https://wiki.dominionstrategy.com/index.php/Sets
 // (Note that Cornucopia and Guilds are together because they are now sold together)
 export const settingsState = $state<SettingsState>({
-  version: '1.0',
+  version: '1.1',
   sets: {
     Base: {
       name: "Base",
