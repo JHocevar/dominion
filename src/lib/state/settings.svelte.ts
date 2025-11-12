@@ -1,4 +1,5 @@
 type SettingsState = {
+  version: string,
   sets: Record<string, Set>
   platinumChance: number
   platinumChanceNoCards: number
@@ -24,7 +25,10 @@ type Set = {
   minCards: number
 }
 
+// Taken from https://wiki.dominionstrategy.com/index.php/Sets
+// (Note that Cornucopia and Guilds are together because they are now sold together)
 export const settingsState = $state<SettingsState>({
+  version: '1.0',
   sets: {
     Base: {
       name: "Base",
@@ -76,16 +80,6 @@ export const settingsState = $state<SettingsState>({
       weight: 1,
       minCards: 0,
     },
-    Cornucopia: {
-      name: "Cornucopia",
-      enabled: false,
-      hidden: false,
-      cardCount: 150,
-      secondEdition: true,
-      secondEditionEnabled: true,
-      weight: 1,
-      minCards: 0,
-    },
     Hinterlands: {
       name: "Hinterlands",
       enabled: false,
@@ -102,16 +96,6 @@ export const settingsState = $state<SettingsState>({
       hidden: false,
       cardCount: 500,
       secondEdition: false,
-      weight: 1,
-      minCards: 0,
-    },
-    Guilds: {
-      name: "Guilds",
-      enabled: false,
-      hidden: false,
-      cardCount: 150,
-      secondEdition: true,
-      secondEditionEnabled: true,
       weight: 1,
       minCards: 0,
     },
@@ -178,6 +162,15 @@ export const settingsState = $state<SettingsState>({
       weight: 1,
       minCards: 0,
     },
+    CornucopiaGuilds: {
+      name: "Cornucopia & Guilds",
+      enabled: false,
+      hidden: false,
+      cardCount: 300,
+      secondEdition: false,
+      weight: 1,
+      minCards: 0
+    },
     RisingSun: {
       name: "Rising Sun",
       enabled: false,
@@ -213,10 +206,21 @@ export function saveSettings() {
 
 export function loadSettings() {
   try {
-    if (typeof localStorage === 'undefined') return
+    if (typeof localStorage === 'undefined') {
+      return
+    }
+
     const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return
+    if (!raw) {
+      return
+    }
+
     const parsed = JSON.parse(raw)
+    if (parsed.version !== settingsState.version) {
+      console.warn("Settings schema changed, settings need to be reset to pick up changes")
+      return
+    }
+
     // shallow merge top-level keys to preserve reactive $state shape
     Object.keys(parsed).forEach((k) => {
       // @ts-ignore
