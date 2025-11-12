@@ -192,11 +192,11 @@
     </button>
   </div>
 </div>
-<div class="item not-implemented">
+<div class="item">
   <span>Require Trashing</span>
   <div>
     <button
-      class="btn btn-primary btn-settings not-implemented"
+      class="btn btn-primary btn-settings"
       class:enabled={settingsState.requireTrashing}
       onclick={() => {
         settingsState.requireTrashing = !settingsState.requireTrashing

@@ -6,6 +6,7 @@
     <p>New Features</p>
     <ul>
       <li>Implemented Require Draw Card setting</li>
+      <li>Implemented Require Trashing Card setting</li>
     </ul>
 
     <p>Fixes</p>

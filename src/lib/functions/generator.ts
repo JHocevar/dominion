@@ -37,6 +37,13 @@ export function generateKingdon() {
       availableCards.splice(availableCards.indexOf(reaction), 1)
     }
   }
+  if (settingsState.requireTrashing) {
+    const trashing = getTrashing(availableCards)
+    if (trashing) {
+      kingdomState.cards.push(trashing)
+      availableCards.splice(availableCards.indexOf(trashing), 1)
+    }
+  }
 
   while (kingdomState.cards.length < 10) {
     const randomCard = getRandomCard(availableCards)
@@ -68,6 +75,14 @@ function getDrawCard(cards: Card[]): Card | null {
   const drawers = cards.filter((card) => combined.includes(card.Name))
   if (drawers.length > 0) {
     return getRandomCard(drawers)
+  }
+  return null
+}
+
+function getTrashing(cards: Card[]): Card | null {
+  const trashers = cards.filter((card) => parseInt(card.Trash) >= 1)
+  if (trashers.length > 0) {
+    return getRandomCard(trashers)
   }
   return null
 }

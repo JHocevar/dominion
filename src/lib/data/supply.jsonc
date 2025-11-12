@@ -39,5 +39,7 @@
     "Wizard",   // Allies, Rotating pile
     "Clash",    // Allies, Rotating pile
     "Knight"    // Dark Ages, each knight is unique
+
+    // TODO: Implement travelers
   ]
 }
