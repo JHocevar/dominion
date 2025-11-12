@@ -1,6 +1,8 @@
 <script lang="ts">
   import { generateKingdon, rerollOneCard } from "$lib/functions/generator"
   import { kingdomState } from "$lib/state/kingdom.svelte"
+
+  const fullKingdom = $derived([...kingdomState.cards, ...kingdomState.extraCards])
 </script>
 
 <h1>Kingdom Generator</h1>
@@ -13,7 +15,7 @@
   New Kingdom
 </button>
 
-{#each kingdomState.cards as card}
+{#each fullKingdom as card}
   <div
     class={[
       "card",

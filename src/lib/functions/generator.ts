@@ -1,13 +1,19 @@
 import { parse as jsoncParse } from "jsonc-parser"
 import { settingsState } from "$lib/state/settings.svelte"
 import { kingdomState } from "$lib/state/kingdom.svelte"
-import { loadAllSupplyCards, type Card } from "$lib/functions/cards"
+import {
+  loadAllSupplyCards,
+  loadPlatinumColonyCards,
+  type Card,
+} from "$lib/functions/cards"
 import drawCardsJson from "$lib/data/draw-cards.jsonc?raw"
 
 const drawCards = jsoncParse(drawCardsJson)
 
 export function generateKingdon() {
   kingdomState.cards = []
+  kingdomState.extraCards = []
+
   const availableCards = getAvailableCards()
 
   if (availableCards.length === 0) {
@@ -51,6 +57,14 @@ export function generateKingdon() {
     kingdomState.cards.push(randomCard)
   }
 
+  // Check Platinum / Colony
+  if (usePlatinumColony(kingdomState.cards)) {
+    kingdomState.extraCards.push(...loadPlatinumColonyCards())
+  }
+
+  kingdomState.cards.sort((cardA, cardB) =>
+    cardA.Name.localeCompare(cardB.Name)
+  )
   return "Generated new kingdom"
 }
 
@@ -125,6 +139,20 @@ function getAvailableCards(): Card[] {
       !settingsState.bannedCards.includes(card.Name) &&
       !kingdomState.cards.some((c) => c.Name === card.Name)
   )
+}
+
+function usePlatinumColony(kingdomCards: Card[]): boolean {
+  const prosperityCards = kingdomCards.filter((card) =>
+    card.Set.includes("Prosperity")
+  )
+  const prosperityCount = prosperityCards.length
+
+  const percentage =
+    prosperityCount > 0
+      ? prosperityCount * settingsState.platinumChance
+      : settingsState.platinumChanceNoCards
+
+  return Math.random() < percentage
 }
 
 export function rerollOneCard(card: Card): void {

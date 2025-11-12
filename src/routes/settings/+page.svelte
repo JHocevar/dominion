@@ -94,20 +94,18 @@
   {/each}
 {/if}
 
-<div class="item not-implemented">
+<div class="item">
   <span> Platinum / Colony % per card </span>
   <input
-    class="input not-implemented"
-    disabled
+    class="input"
     onchange={saveSettings}
     bind:value={settingsState.platinumChance}
   />
 </div>
-<div class="item not-implemented">
+<div class="item">
   <span> Platinum / Colony % with 0 cards </span>
   <input
-    class="input not-implemented"
-    disabled
+    class="input"
     onchange={saveSettings}
     bind:value={settingsState.platinumChanceNoCards}
   />

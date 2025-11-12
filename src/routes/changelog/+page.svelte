@@ -7,12 +7,14 @@
     <ul>
       <li>Implemented Require Draw Card setting</li>
       <li>Implemented Require Trashing Card setting</li>
+      <li>Implemented Platinum & Colony chance setting</li>
     </ul>
 
     <p>Fixes</p>
     <ul>
       <li>fix: make each new kingdom random (not effected by previous one)</li>
       <li>fix: combine cornucopia & guilds</li>
+      <li>fix: prosperity cards not being added to kingdoms</li>
       <li>fix: properly exclude more non-kindgom cards (ruins, bat, wish, key)</li>
     </ul>
 

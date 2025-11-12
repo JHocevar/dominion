@@ -76,3 +76,8 @@ export function loadAllSupplyCards(): Card[] {
   })
   return filteredCards
 }
+
+export function loadPlatinumColonyCards(): Card[] {
+  const allCards = loadAllCards()
+  return allCards.filter((card) => ['Platinum', 'Colony'].includes(card.Name))
+}
