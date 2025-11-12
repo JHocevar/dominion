@@ -8,6 +8,7 @@
       <li>Implemented Require Draw Card setting</li>
       <li>Implemented Require Trashing Card setting</li>
       <li>Implemented Platinum & Colony chance setting</li>
+      <li>Sort generated kingdoms alphabetically</li>
     </ul>
 
     <p>Fixes</p>
