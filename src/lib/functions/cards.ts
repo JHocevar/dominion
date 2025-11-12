@@ -1,7 +1,7 @@
 import { parse as csvParse } from "csv-parse/browser/esm/sync"
 import { parse as jsoncParse } from "jsonc-parser"
 import cardsData from "$lib/data/cards.csv?raw"
-import supply from "$lib/data/supply.jsonc?raw"
+import supplyJson from "$lib/data/supply.jsonc?raw"
 
 export type Card = {
   Name: string
@@ -20,16 +20,16 @@ export type Card = {
   Victory: string
 }
 
-const supplyJson = jsoncParse(supply)
+const supply = jsoncParse(supplyJson)
 
 // List of cards that appear in the table, but are not in the supply
-export const nonSupplyCards: string[] = supplyJson.nonSupplyCards
+export const nonSupplyCards: string[] = supply.nonSupplyCards
 
 // Categories of cards that are not cards that even enter your deck
-export const nonSupplyCategories: string[] = supplyJson.nonSupplyCategories
+export const nonSupplyCategories: string[] = supply.nonSupplyCategories
 
 // Supply piles with multiple cards in a single stack
-export const specialMultiStackCards: string[] = supplyJson.multiStackCards
+export const specialMultiStackCards: string[] = supply.multiStackCards
 
 export function loadAllCards(): Card[] {
   const records: Card[] = csvParse(cardsData, {

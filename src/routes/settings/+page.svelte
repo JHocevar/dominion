@@ -147,11 +147,11 @@
     </button>
   </div>
 </div>
-<div class="item not-implemented">
+<div class="item">
   <span>Require Draw (+2 cards)</span>
   <div>
     <button
-      class="btn btn-primary btn-settings not-implemented"
+      class="btn btn-primary btn-settings"
       class:enabled={settingsState.requireDraw}
       onclick={() => {
         settingsState.requireDraw = !settingsState.requireDraw

@@ -1,6 +1,10 @@
+import { parse as jsoncParse } from "jsonc-parser"
 import { settingsState } from "$lib/state/settings.svelte"
 import { kingdomState } from "$lib/state/kingdom.svelte"
 import { loadAllSupplyCards, type Card } from "$lib/functions/cards"
+import drawCardsJson from "$lib/data/draw-cards.jsonc?raw"
+
+const drawCards = jsoncParse(drawCardsJson)
 
 export function generateKingdon() {
   kingdomState.cards = []
@@ -19,7 +23,7 @@ export function generateKingdon() {
       availableCards.splice(availableCards.indexOf(village), 1)
     }
   }
-  if (settingsState.requireVillage) {
+  if (settingsState.requireDraw) {
     const drawCard = getDrawCard(availableCards)
     if (drawCard) {
       kingdomState.cards.push(drawCard)
@@ -56,8 +60,15 @@ function getVillage(cards: Card[]): Card | null {
   return null
 }
 
-// TODO: implement
 function getDrawCard(cards: Card[]): Card | null {
+  const noSupport = drawCards.noSupport
+  const villageSupport = drawCards.villageSupport
+  const combined = [...noSupport, ...villageSupport]
+
+  const drawers = cards.filter((card) => combined.includes(card.Name))
+  if (drawers.length > 0) {
+    return getRandomCard(drawers)
+  }
   return null
 }
 

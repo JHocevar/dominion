@@ -5,7 +5,7 @@
     <h2>11/11/25</h2>
     <p>New Features</p>
     <ul>
-      <li></li>
+      <li>Implemented Require Draw Card setting</li>
     </ul>
 
     <p>Fixes</p>
