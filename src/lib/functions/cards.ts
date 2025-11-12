@@ -1,5 +1,7 @@
+import { parse as csvParse } from "csv-parse/browser/esm/sync"
+import { parse as jsoncParse } from "jsonc-parser"
 import cardsData from "$lib/data/cards.csv?raw"
-import { parse } from "csv-parse/browser/esm/sync"
+import supply from "$lib/data/supply.jsonc?raw"
 
 export type Card = {
   Name: string
@@ -18,52 +20,19 @@ export type Card = {
   Victory: string
 }
 
-// List of cards that appear in the table, but are not in the supply
-export const nonSupplyCards: string[] = [
-  "Copper",
-  "Silver",
-  "Gold",
-  "Platinum",
-  "Estate",
-  "Duchy",
-  "Province",
-  "Colony",
-  "Curse",
-  "Spoils",
-  "Potion",
-  "Ruins",
-  "Horse",
-  "Plunder",
-  "Loot",
+const supplyJson = jsoncParse(supply)
 
-  // Add rotating and travelers here
-]
+// List of cards that appear in the table, but are not in the supply
+export const nonSupplyCards: string[] = supplyJson.nonSupplyCards
 
 // Categories of cards that are not cards that even enter your deck
-export const nonSupplyCategory: string[] = [
-  "Event",
-  "Landmark",
-  "Project",
-  "Way",
-  "Boon",
-  "Hex",
-  "State",
-  "Ally",
-  "Trait",
-  "Prophecy",
-]
+export const nonSupplyCategories: string[] = supplyJson.nonSupplyCategories
 
-export const specialMultiStackCards: string[] = [
-  "Augur",  // Allies, Rotating pile
-  "Fort",   // Allies, Rotating pile
-  "Wizard", // Allies, Rotating pile
-  "Clash",  // Allies, Rotating pile
-  "Knight", // Dark Ages, each knight is unique
-  "Castle", // Empires, each castle is unique
-]
+// Supply piles with multiple cards in a single stack
+export const specialMultiStackCards: string[] = supplyJson.multiStackCards
 
 export function loadAllCards(): Card[] {
-  const records: Card[] = parse(cardsData, {
+  const records: Card[] = csvParse(cardsData, {
     columns: true,
     skip_empty_lines: true,
     cast: (value, context) => {
@@ -81,7 +50,7 @@ export function loadAllSupplyCards(): Card[] {
   const filteredCards = allCards.filter(
     (card) =>
       !nonSupplyCards.includes(card.Name) &&
-      !nonSupplyCategory.some((category) => card.Types.includes(category)) &&
+      !nonSupplyCategories.some((category) => card.Types.includes(category)) &&
       !specialMultiStackCards.some((category) => card.Types.includes(category))
   )
   specialMultiStackCards.forEach((specialType) => {

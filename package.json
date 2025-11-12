@@ -23,6 +23,7 @@
 		"vite": "^7.1.10"
 	},
 	"dependencies": {
-		"csv-parse": "^6.1.0"
+		"csv-parse": "^6.1.0",
+		"jsonc-parser": "^3.3.1"
 	}
 }

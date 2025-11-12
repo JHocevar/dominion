@@ -11,6 +11,13 @@
     <p>Fixes</p>
     <ul>
       <li>fix: make each new kingdom random (not effected by previous one)</li>
+      <li>fix: combine cornucopia & guilds</li>
+      <li>fix: properly exclude more non-kindgom cards (ruins, bat, wish, key)</li>
+    </ul>
+
+    <p>Breaking Changes</p>
+    <ul>
+      <li>Set schema changed, saved settings will be lost and need to be reconfigured</li>
     </ul>
   </div>
 

@@ -1,0 +1,43 @@
+// Last Update - 11/11/2025
+{
+  "nonSupplyCards": [
+    "Copper",
+    "Silver",
+    "Gold",
+    "Platinum", // Prosperity
+    "Potion",   // Alchemy
+    "Estate",
+    "Duchy",
+    "Province",
+    "Colony",   // Prosperity
+    "Curse",
+    "Spoils",   // Dark Ages
+    "Plunder",  // Plunder
+    "Bat",      // Nocturne
+    "Wish",     // Nocturne
+    "Horse",    // Menagerie
+    "Key"       // Renaissance
+  ],
+  "nonSupplyCategories": [
+    "Event",    // Multiple
+    "Landmark", // Empires
+    "Project",  // Renaissance
+    "Way",      // Menagerie
+    "Loot",     // Plunder
+    "Boon",     // Nocturne
+    "Hex",      // Nocturne
+    "State",    // Nocturne
+    "Ally",     // Allies
+    "Trait",    // Plunder
+    "Prophecy", // Rising Sun
+    "Ruins"     // Dark Ages
+  ],
+  "multiStackCards": [
+    "Castle",   // Empires, each castle is unique
+    "Augur",    // Allies, Rotating pile
+    "Fort",     // Allies, Rotating pile
+    "Wizard",   // Allies, Rotating pile
+    "Clash",    // Allies, Rotating pile
+    "Knight"    // Dark Ages, each knight is unique
+  ]
+}
