@@ -71,7 +71,7 @@ export const settingsState = $state<SettingsState>({
       minCards: 0,
     },
     Prosperity: {
-      name: "Propsperity",
+      name: "Prosperity",
       enabled: false,
       hidden: false,
       cardCount: 300,
