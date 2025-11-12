@@ -2,7 +2,20 @@
 
 <div class="container">
   <div class="item">
-    <h2>1.1</h2>
+    <h2>11/11/25</h2>
+    <p>New Features</p>
+    <ul>
+      <li></li>
+    </ul>
+
+    <p>Fixes</p>
+    <ul>
+      <li>fix: make each new kingdom random (not effected by previous one)</li>
+    </ul>
+  </div>
+
+  <div class="item">
+    <h2>11/10/25</h2>
     <p>New Features</p>
     <ul>
       <li>Added Changelog page</li>
@@ -18,7 +31,7 @@
   </div>
 
   <div class="item">
-    <h2>1.0</h2>
+    <h2>11/5/25</h2>
     <p>Initial Release</p>
   </div>
 </div>

@@ -3,14 +3,13 @@ import { kingdomState } from "$lib/state/kingdom.svelte"
 import { loadAllSupplyCards, type Card } from "$lib/functions/cards"
 
 export function generateKingdon() {
+  kingdomState.cards = []
   const availableCards = getAvailableCards()
 
   if (availableCards.length === 0) {
     kingdomState.cards = []
     return "No sets enabled"
   }
-
-  kingdomState.cards = []
 
   // Apply guaranteed cards
   if (settingsState.requireVillage) {
@@ -91,20 +90,18 @@ function getAvailableCards(): Card[] {
 
   let allCards = loadAllSupplyCards()
   if (settingsState.disableAttack) {
-    allCards = allCards.filter(card => !card.Types.includes('Attack'))
+    allCards = allCards.filter((card) => !card.Types.includes("Attack"))
   }
 
-  console.log("kingdom cards are: ", kingdomState.cards)
   return allCards.filter(
     (card) =>
       enabledSets.includes(card.Set) &&
       !settingsState.bannedCards.includes(card.Name) &&
-      !kingdomState.cards.some(c => c.Name === card.Name)
+      !kingdomState.cards.some((c) => c.Name === card.Name)
   )
 }
 
 export function rerollOneCard(card: Card): void {
-  console.log('logging cards')
   const availableCards = getAvailableCards().filter((c) => c.Name !== card.Name)
   const randomCard = getRandomCard(availableCards)
   const index = kingdomState.cards.findIndex((c) => c.Name === card.Name)
