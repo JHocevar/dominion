@@ -10,6 +10,8 @@
 
 <h1>Settings</h1>
 
+<div class="btn btn-primary"><a href="/generator">Looks good - Let's generate!</a></div>
+
 <div class="header-container">
   <button
     class="section-header"
@@ -54,9 +56,7 @@
             class="btn btn-primary btn-settings"
             class:enabled={settingsState.sets[key].enabled}
             onclick={() => {
-              console.log("before", settingsState.sets[key].enabled)
               settingsState.sets[key].enabled = !settingsState.sets[key].enabled
-              console.log("after", settingsState.sets[key].enabled)
               saveSettings()
             }}
             >{settingsState.sets[key].enabled ? "Enabled" : "Disabled"}</button
@@ -206,12 +206,17 @@
 </div>
 
 <style>
+  a {
+    text-decoration: none;
+    color: var(--text);
+  }
+
   .header-container {
     width: var(--card-width);
     display: flex;
     align-items: center;
     gap: 1rem;
-    margin-bottom: 1rem;
+    margin: 1rem 0;
     color: var(--text);
   }
 

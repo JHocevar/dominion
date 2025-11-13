@@ -5,17 +5,14 @@
     <h2>11/12/25</h2>
     <p>New Features</p>
     <ul>
-      <li></li>
+      <li>Implemented Shelter chance setting</li>
+      <li>Highlight attacks in red in generator</li>
     </ul>
 
     <p>Fixes</p>
     <ul>
       <li>fix: remove reroll icon from extra added cards</li>
-    </ul>
-
-    <p>Breaking Changes</p>
-    <ul>
-      <li>Set schema changed, saved settings will be lost and need to be reconfigured</li>
+      <li>fix: properly exclude more non-kindgom cards (shelters)</li>
     </ul>
   </div>
 

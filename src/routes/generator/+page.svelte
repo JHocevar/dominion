@@ -10,13 +10,17 @@
 
 <h1>Kingdom Generator</h1>
 
-<button
-  class="btn btn-primary"
-  onclick={() => generateKingdon()}
-  style="margin-bottom: 10px;"
->
-  New Kingdom
-</button>
+<div class="wrapper">
+  <button
+    class="btn btn-primary"
+    onclick={() => generateKingdon()}
+    style="margin-bottom: 10px;"
+  >
+    New Kingdom
+  </button>
+
+  <div class="link-to-settings"><a href="/settings">⚙️</a></div>
+</div>
 
 {#each fullKingdom as card}
   <div
@@ -39,6 +43,8 @@
     {/if}
   </div>
 {/each}
+
+<!-- </div> -->
 
 <style>
   .card {
@@ -63,6 +69,23 @@
     height: 35px;
   }
 
+  .wrapper {
+    position: relative;
+    width: var(--card-width);
+    text-align: center;
+  }
+
+  .link-to-settings {
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: var(--font-size-xl);
+  }
+
+  a {
+    text-decoration: none;
+  }
+
   /* primary button styling moved to global +layout.css as .btn and .btn-primary */
 
   .set {
@@ -76,7 +99,7 @@
 
   .attack {
     border: 2px solid red;
-    box-shadow: inset 0 0 8px .15em red;
+    box-shadow: inset 0 0 8px 0.15em red;
   }
 
   .reaction {
@@ -120,6 +143,12 @@
   }
 
   .victory.reaction.duration {
-    background: linear-gradient(45deg, lightgreen 33%, steelblue 34%, steelblue 66%, orange 67%)
+    background: linear-gradient(
+      45deg,
+      lightgreen 33%,
+      steelblue 34%,
+      steelblue 66%,
+      orange 67%
+    );
   }
 </style>

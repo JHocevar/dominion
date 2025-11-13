@@ -26,6 +26,7 @@ export function generateKingdon() {
   if (settingsState.requireVillage) {
     const village = getVillage(availableCards)
     if (village) {
+      console.log('adding village: ', village)
       kingdomState.cards.push(village)
       availableCards.splice(availableCards.indexOf(village), 1)
     }
@@ -33,6 +34,7 @@ export function generateKingdon() {
   if (settingsState.requireDraw) {
     const drawCard = getDrawCard(availableCards)
     if (drawCard) {
+      console.log('adding draw: ', drawCard)
       kingdomState.cards.push(drawCard)
       availableCards.splice(availableCards.indexOf(drawCard), 1)
     }
@@ -40,6 +42,7 @@ export function generateKingdon() {
   if (!settingsState.disableAttack && settingsState.requireReaction) {
     const reaction = getAttackReaction(availableCards)
     if (reaction) {
+      console.log('adding reaction: ', reaction)
       kingdomState.cards.push(reaction)
       availableCards.splice(availableCards.indexOf(reaction), 1)
     }
@@ -47,6 +50,7 @@ export function generateKingdon() {
   if (settingsState.requireTrashing) {
     const trashing = getTrashing(availableCards)
     if (trashing) {
+      console.log('adding trashing: ', trashing)
       kingdomState.cards.push(trashing)
       availableCards.splice(availableCards.indexOf(trashing), 1)
     }
@@ -105,6 +109,7 @@ function getDrawCard(cards: Card[]): Card | null {
 
 function getTrashing(cards: Card[]): Card | null {
   const trashers = cards.filter((card) => parseInt(card.Trash) >= 1)
+  console.log('got ', trashers.length, 'trashers')
   if (trashers.length > 0) {
     return getRandomCard(trashers)
   }
