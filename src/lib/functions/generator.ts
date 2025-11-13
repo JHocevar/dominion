@@ -116,8 +116,12 @@ function getTrashing(cards: Card[]): Card | null {
   return null
 }
 
-// TODO: implement
 function getAttackReaction(cards: Card[]): Card | null {
+  const attackReactions = cards.filter((card) => card.Text.toLocaleLowerCase().includes("when another player plays an attack"))
+  console.log('got ', attackReactions.length, 'attack reactions', attackReactions)
+  if (attackReactions.length > 0) {
+    return getRandomCard(attackReactions)
+  }
   return null
 }
 

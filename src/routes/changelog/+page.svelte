@@ -6,6 +6,7 @@
     <p>New Features</p>
     <ul>
       <li>Implemented Shelter chance setting</li>
+      <li>Implemented attack reaction requirement setting</li>
       <li>Highlight attacks in red in generator</li>
       <li>Added another page link between generation and settings pages</li>
     </ul>

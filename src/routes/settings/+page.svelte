@@ -174,11 +174,11 @@
     </button>
   </div>
 </div>
-<div class="item not-implemented">
-  <span>Require Reaction</span>
+<div class="item">
+  <span>Require Attack Reaction</span>
   <div>
     <button
-      class="btn btn-primary btn-settings not-implemented"
+      class="btn btn-primary btn-settings"
       class:enabled={settingsState.requireReaction}
       onclick={() => {
         settingsState.requireReaction = !settingsState.requireReaction
@@ -370,16 +370,5 @@
   input[type="number"] {
     -webkit-appearance: none;
     margin: 0;
-  }
-
-  .not-implemented {
-    color: var(--muted);
-    opacity: 0.5;
-  }
-
-  .not-implemented:hover {
-    cursor: default !important;
-    transform: none !important;
-    opacity: 0.5 !important;
   }
 </style>
