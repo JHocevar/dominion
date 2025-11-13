@@ -74,8 +74,13 @@
     background: lightgrey;
   }
 
+  .attack {
+    border: 2px solid red;
+    box-shadow: inset 0 0 8px .15em red;
+  }
+
   .reaction {
-    background: lightblue;
+    background: steelblue;
   }
 
   .duration {
@@ -112,5 +117,9 @@
 
   .victory.treasure {
     background: linear-gradient(45deg, lightgreen 49%, gold 51%);
+  }
+
+  .victory.reaction.duration {
+    background: linear-gradient(45deg, lightgreen 33%, steelblue 34%, steelblue 66%, orange 67%)
   }
 </style>
