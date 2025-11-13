@@ -2,7 +2,10 @@
   import { generateKingdon, rerollOneCard } from "$lib/functions/generator"
   import { kingdomState } from "$lib/state/kingdom.svelte"
 
-  const fullKingdom = $derived([...kingdomState.cards, ...kingdomState.extraCards])
+  const fullKingdom = $derived([
+    ...kingdomState.cards,
+    ...kingdomState.extraCards,
+  ])
 </script>
 
 <h1>Kingdom Generator</h1>
@@ -29,9 +32,11 @@
       <span class="name">{card.Name}</span>
       <span class="set">{card.Set}</span>
     </div>
-    <div class="right">
-      <button class="reroll" onclick={() => rerollOneCard(card)}>🎲</button>
-    </div>
+    {#if kingdomState.cards.includes(card)}
+      <div class="right">
+        <button class="reroll" onclick={() => rerollOneCard(card)}>🎲</button>
+      </div>
+    {/if}
   </div>
 {/each}
 
