@@ -10,7 +10,9 @@
 
 <h1>Settings</h1>
 
-<div class="btn btn-primary"><a href="/generator">Looks good - Let's generate!</a></div>
+<div class="btn btn-primary">
+  <a href="/generator">Looks good - Let's generate!</a>
+</div>
 
 <div class="header-container">
   <button
@@ -94,6 +96,12 @@
     </div>
   {/each}
 {/if}
+
+<div style="margin: 1rem 0;">
+  <span style="color: red;">{settingsState.bannedCards.length}</span> cards have
+  been banned. Update this list in the <button class="btn btn-primary"><a href="/database">Database</a></button>
+</div>
+
 
 <div class="item">
   <span> Platinum / Colony % per card </span>

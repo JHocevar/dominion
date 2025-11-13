@@ -9,6 +9,7 @@
       <li>Implemented attack reaction requirement setting</li>
       <li>Highlight attacks in red in generator</li>
       <li>Added another page link between generation and settings pages</li>
+      <li>Show banned card count in settings and link to database</li>
     </ul>
 
     <p>Fixes</p>
