@@ -1,11 +1,15 @@
 <script lang="ts">
   import { settingsState, saveSettings } from "$lib/state/settings.svelte"
+  import { MediaQuery } from "svelte/reactivity"
+
   let showSets = true
   let showAdvanced = false
 
   function toggleAllAdvanced() {
     showAdvanced = !showAdvanced
   }
+
+  let bigEnough = new MediaQuery("min-width: 375px")
 </script>
 
 <h1>Settings</h1>
@@ -38,32 +42,37 @@
     <div class="item">
       <div class="item-header">
         <span>{set.name}</span>
-        <div class={["button-group", showAdvanced ? "column" : "row"]}>
-          {#if set.secondEdition}
+        {#if !showAdvanced || bigEnough.current}
+          <div class={["button-group", showAdvanced ? "column" : "row"]}>
+            {#if set.secondEdition}
+              <button
+                class="btn btn-primary btn-settings btn-small"
+                class:enabled={settingsState.sets[key].secondEditionEnabled}
+                disabled={settingsState.sets[key].enabled === false}
+                onclick={(e) => {
+                  e.preventDefault()
+                  settingsState.sets[key].secondEditionEnabled =
+                    !settingsState.sets[key].secondEditionEnabled
+                  saveSettings()
+                }}
+              >
+                {settingsState.sets[key].secondEditionEnabled ? "2nd" : "1st"}
+              </button>
+            {/if}
             <button
-              class="btn btn-primary btn-settings btn-small"
-              class:enabled={settingsState.sets[key].secondEditionEnabled}
-              disabled={settingsState.sets[key].enabled === false}
-              onclick={(e) => {
-                e.preventDefault()
-                settingsState.sets[key].secondEditionEnabled =
-                  !settingsState.sets[key].secondEditionEnabled
+              class="btn btn-primary btn-settings"
+              class:enabled={settingsState.sets[key].enabled}
+              onclick={() => {
+                settingsState.sets[key].enabled =
+                  !settingsState.sets[key].enabled
                 saveSettings()
               }}
+              >{settingsState.sets[key].enabled
+                ? "Enabled"
+                : "Disabled"}</button
             >
-              {settingsState.sets[key].secondEditionEnabled ? "2nd" : "1st"}
-            </button>
-          {/if}
-          <button
-            class="btn btn-primary btn-settings"
-            class:enabled={settingsState.sets[key].enabled}
-            onclick={() => {
-              settingsState.sets[key].enabled = !settingsState.sets[key].enabled
-              saveSettings()
-            }}
-            >{settingsState.sets[key].enabled ? "Enabled" : "Disabled"}</button
-          >
-        </div>
+          </div>
+        {/if}
       </div>
       {#if showAdvanced}
         <div class="advanced-settings">
@@ -99,9 +108,9 @@
 
 <div style="margin: 1rem 0;">
   <span style="color: red;">{settingsState.bannedCards.length}</span> cards have
-  been banned. Update this list in the <button class="btn btn-primary"><a href="/database">Database</a></button>
+  been banned. Update this list in the
+  <button class="btn btn-primary"><a href="/database">Database</a></button>
 </div>
-
 
 <div class="item">
   <span> Platinum / Colony % per card </span>
