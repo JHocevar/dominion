@@ -125,7 +125,7 @@ function getAttackReaction(cards: Card[]): Card | null {
   return null
 }
 
-function getAvailableCards(): Card[] {
+export function getAvailableCards(): Card[] {
   const enabledSets = Object.keys(settingsState.sets)
     .filter((set) => settingsState.sets[set].enabled)
     .flatMap((set) => {
