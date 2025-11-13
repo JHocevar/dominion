@@ -20,6 +20,23 @@ export type Card = {
   Victory: string
 }
 
+export const blankCard: Card = {
+  Name: "Blank Card",
+  Set: "None",
+  Types: "None",
+  Cost: 0,
+  Text: "No Text",
+  Actions: "0",
+  Cards: "0",
+  Buys: "0",
+  Coins: "0",
+  Trash: "0",
+  Exile: "0",
+  Junk: "0",
+  Gain: "0",
+  Victory: "0"
+}
+
 const supply = jsoncParse(supplyJson)
 
 // List of cards that appear in the table, but are not in the supply
@@ -57,20 +74,11 @@ export function loadAllSupplyCards(): Card[] {
     const example = allCards.find((card) => card.Types.includes(specialType))
     if (example) {
       filteredCards.push({
+        ...blankCard,
         Name: specialType,
         Set: example.Set,
         Types: example.Types,
-        Cost: 0,
         Text: `This is a placeholder for the ${specialType} multi-stack pile.`,
-        Actions: "",
-        Cards: "",
-        Buys: "",
-        Coins: "",
-        Trash: "",
-        Exile: "",
-        Junk: "",
-        Gain: "",
-        Victory: "",
       })
     }
   })

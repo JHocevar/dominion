@@ -112,20 +112,18 @@
   />
 </div>
 
-<div class="item not-implemented">
+<div class="item">
   <span> Shelters % per card </span>
   <input
-    class="input not-implemented"
-    disabled
+    class="input"
     onchange={saveSettings}
     bind:value={settingsState.shelterChance}
   />
 </div>
-<div class="item not-implemented">
+<div class="item">
   <span> Shelters % with 0 cards </span>
   <input
-    class="input not-implemented"
-    disabled
+    class="input"
     onchange={saveSettings}
     bind:value={settingsState.shelterChanceNoCards}
   />

@@ -29,8 +29,9 @@
     "State",    // Nocturne
     "Ally",     // Allies
     "Trait",    // Plunder
-    "Prophecy", // Rising Sun
-    "Ruins"     // Dark Ages
+    "Ruins",    // Dark Ages
+    "Shelter",  // Dark Ages
+    "Prophecy"  // Rising Sun
   ],
   "multiStackCards": [
     "Castle",   // Empires, each castle is unique

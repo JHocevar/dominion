@@ -2,6 +2,7 @@ import { parse as jsoncParse } from "jsonc-parser"
 import { settingsState } from "$lib/state/settings.svelte"
 import { kingdomState } from "$lib/state/kingdom.svelte"
 import {
+  blankCard,
   loadAllSupplyCards,
   loadPlatinumColonyCards,
   type Card,
@@ -60,6 +61,15 @@ export function generateKingdon() {
   // Check Platinum / Colony
   if (usePlatinumColony(kingdomState.cards)) {
     kingdomState.extraCards.push(...loadPlatinumColonyCards())
+  }
+
+  // Check Shelters
+  if (useShelters(kingdomState.cards)) {
+    kingdomState.extraCards.push({
+      ...blankCard,
+      Name: "Shelters",
+      Types: "Action - Reaction - Duration - Victory",
+    })
   }
 
   kingdomState.cards.sort((cardA, cardB) =>
@@ -151,6 +161,20 @@ function usePlatinumColony(kingdomCards: Card[]): boolean {
     prosperityCount > 0
       ? prosperityCount * settingsState.platinumChance
       : settingsState.platinumChanceNoCards
+
+  return Math.random() < percentage
+}
+
+function useShelters(kingdomCards: Card[]): boolean {
+  const darkAgesCards = kingdomCards.filter((card) =>
+    card.Set.includes("Dark Ages")
+  )
+  const darkAgesCount = darkAgesCards.length
+
+  const percentage =
+    darkAgesCount > 0
+      ? darkAgesCount * settingsState.shelterChance
+      : settingsState.shelterChanceNoCards
 
   return Math.random() < percentage
 }
