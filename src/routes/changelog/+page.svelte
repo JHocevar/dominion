@@ -10,6 +10,7 @@
       <li>Highlight attacks in red in generator</li>
       <li>Added another page link between generation and settings pages</li>
       <li>Show banned card count in settings and link to database</li>
+      <li>Improvements to database visuals and filters</li>
     </ul>
 
     <p>Fixes</p>
