@@ -40,22 +40,23 @@
               class="btn btn-primary btn-settings btn-small"
               class:enabled={settingsState.sets[key].secondEditionEnabled}
               disabled={settingsState.sets[key].enabled === false}
-              onclick={() => {
+              onclick={(e) => {
+                e.preventDefault()
                 settingsState.sets[key].secondEditionEnabled =
                   !settingsState.sets[key].secondEditionEnabled
                 saveSettings()
               }}
             >
-              {settingsState.sets[key].secondEditionEnabled
-                ? "2nd"
-                : "1st"}
+              {settingsState.sets[key].secondEditionEnabled ? "2nd" : "1st"}
             </button>
           {/if}
           <button
             class="btn btn-primary btn-settings"
             class:enabled={settingsState.sets[key].enabled}
             onclick={() => {
+              console.log("before", settingsState.sets[key].enabled)
               settingsState.sets[key].enabled = !settingsState.sets[key].enabled
+              console.log("after", settingsState.sets[key].enabled)
               saveSettings()
             }}
             >{settingsState.sets[key].enabled ? "Enabled" : "Disabled"}</button
@@ -254,7 +255,7 @@
 
   .item {
     border: 1px solid #ccc;
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-lg);
     padding: 0.5rem;
     border-radius: 4px;
     width: var(--card-width);
@@ -266,7 +267,7 @@
   }
 
   .btn-settings {
-    min-width: 60px;
+    min-width: 100px;
     background-color: #ff4444;
   }
 
@@ -280,10 +281,21 @@
   }
 
   .button-group {
-    padding: 0.75rem;
+    padding: 0.5rem;
     display: flex;
     gap: 0.5rem;
     align-items: center;
+  }
+
+  @media (max-width: 740px) {
+    .btn-settings {
+      min-width: 60px;
+      padding: 5px 0;
+    }
+
+    .button-group {
+      padding: 0.3rem;
+    }
   }
 
   .row {
@@ -316,7 +328,7 @@
 
   .advanced-settings {
     padding: 0.5rem;
-    margin-left: .5rem;
+    margin-left: 0.5rem;
     background: var(--bg-lighter);
     color: var(--text);
     border-radius: 8px;
