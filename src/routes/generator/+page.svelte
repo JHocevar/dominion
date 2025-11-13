@@ -48,7 +48,6 @@
 
 <style>
   .card {
-    border: 1px solid var(--muted);
     color: black;
     padding: 0.25rem;
     font-size: 1.5rem;
@@ -98,7 +97,6 @@
   }
 
   .attack {
-    border: 2px solid red;
     box-shadow: inset 0 0 8px 0.15em red;
   }
 
