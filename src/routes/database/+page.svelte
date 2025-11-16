@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { settingsState, saveSettings } from "$lib/state/settings.svelte"
+  import { saveAll } from '$lib/functions/saving'
+  import { settingsState } from "$lib/state/settings.svelte"
   import { type Card, loadAllSupplyCards } from "$lib/functions/cards"
   import { loadAllCards } from "$lib/functions/cards"
   import { getAvailableCards } from "$lib/functions/generator"
@@ -18,7 +19,7 @@
     } else {
       settingsState.bannedCards.push(card.Name)
     }
-    saveSettings()
+    saveAll()
   }
 
   let allCards = $derived(loadAllCards())
