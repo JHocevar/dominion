@@ -14,7 +14,7 @@
   <button
     class="btn btn-primary"
     onclick={() => generateKingdon()}
-    style="margin-bottom: 10px;"
+    style="margin-bottom: 10px; padding: .75rem 1.25rem;"
   >
     New Kingdom
   </button>

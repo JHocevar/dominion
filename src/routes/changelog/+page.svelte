@@ -2,6 +2,29 @@
 
 <div class="container">
   <div class="item">
+    <h2>11/16/25</h2>
+    <p>New Features</p>
+    <ul>
+      <li>Added a database MongoDB</li>
+      <li>Added Google login (for remote storage only)</li>
+      <li>Added saving to database as well as localhost</li>
+      <li>Added indicator for logged in status</li>
+      <li>Added profile page to handle login (and other info in the future)</li>
+      <li>Removed card list dropdown (always displays)</li>
+      <li>Added Preferences to settings page (non-functional settings)</li>
+      <ul>
+        <li>Show/Hide sets (remove clutter from unowned sets)</li>
+        <li>Show/Hide logged in and theme change indicators</li>
+      </ul>
+    </ul>
+
+    <p>Fixes</p>
+    <ul>
+      <li>Various Styling</li>
+    </ul>
+  </div>
+
+  <div class="item">
     <h2>11/12/25</h2>
     <p>New Features</p>
     <ul>

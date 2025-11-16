@@ -11,6 +11,8 @@ type SettingsState = {
   requireReaction: boolean
   requireTrashing: boolean
   bannedCards: string[]
+  hideLoginIcon: boolean
+  hideThemeIcon: boolean
 }
 
 type Set = {
@@ -191,4 +193,6 @@ export const settingsState = $state<SettingsState>({
   requireReaction: false,
   requireTrashing: false,
   bannedCards: [],
+  hideLoginIcon: false,
+  hideThemeIcon: false,
 })

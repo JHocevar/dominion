@@ -1,24 +1,27 @@
 <script lang="ts">
   import { onMount } from "svelte"
-  import { loadAll } from '$lib/functions/saving'
+  import { loadAll } from "$lib/functions/saving"
   import "$lib/assets/global.css"
   import favicon from "$lib/assets/favicon.ico"
   import { page } from "$app/state"
-  import ConflictDialog from '$lib/components/ConflictDialog.svelte';
-  import { conflictState } from '$lib/state/conflicts.svelte'
+  import ConflictDialog from "$lib/components/ConflictDialog.svelte"
+  import { conflictState } from "$lib/state/conflicts.svelte"
+  import { settingsState } from "$lib/state/settings.svelte"
 
   let { children } = $props()
   let isMenuOpen = $state(false)
   let isDark = $state(true)
   const loggedIn = $derived.by(() => !!page.data?.session?.user?.id)
-  const username = $derived.by(() => page.data?.session?.user?.name ?? '')
+  const username = $derived.by(() => page.data?.session?.user?.name ?? "")
 
   function toggleMenu() {
     isMenuOpen = !isMenuOpen
   }
 
   function applyTheme(isDark: boolean) {
-    document.getElementById('html')?.setAttribute('data-theme', isDark ? 'dark' : 'light')
+    document
+      .getElementById("html")
+      ?.setAttribute("data-theme", isDark ? "dark" : "light")
   }
 
   function toggleTheme() {
@@ -78,7 +81,10 @@
 </header>
 
 {#if conflictState.showConflict && conflictState.conflictData}
-  <ConflictDialog conflictData={conflictState.conflictData} onResolve={handleResolve} />
+  <ConflictDialog
+    conflictData={conflictState.conflictData}
+    onResolve={handleResolve}
+  />
 {/if}
 
 <nav class:open={isMenuOpen}>
@@ -90,7 +96,9 @@
       <a href="/database" onclick={() => (isMenuOpen = false)}>Database</a>
     </li>
     <li class:active={page.url.pathname === "/generator"}>
-      <a href="/generator" onclick={() => (isMenuOpen = false)}>Kingdom Generator</a>
+      <a href="/generator" onclick={() => (isMenuOpen = false)}
+        >Kingdom Generator</a
+      >
     </li>
     <li class:active={page.url.pathname === "/settings"}>
       <a href="/settings" onclick={() => (isMenuOpen = false)}>Settings</a>
@@ -106,27 +114,39 @@
 
 <div class="container">
   <div class="top-controls">
-    <div class="auth-indicator">
-      {#if loggedIn}
-      <a href="/profile" onclick={() => (isMenuOpen = false)} class="auth-link">
-        <span class="status-dot online" aria-hidden="true"></span>
-        {username || 'Profile'}
-      </a>
-      {:else}
-      <a href="/profile" class="auth-link">
-        <span class="status-dot offline" aria-hidden="true"></span>
-        Sign in
-      </a>
-      {/if}
-    </div>
+    {#if !settingsState.hideLoginIcon}
+      <div class="auth-indicator">
+        {#if loggedIn}
+          <a
+            href="/profile"
+            onclick={() => (isMenuOpen = false)}
+            class="auth-link"
+          >
+            <span class="status-dot online" aria-hidden="true"></span>
+            {username || "Profile"}
+          </a>
+        {:else}
+          <a href="/profile" class="auth-link">
+            <span class="status-dot offline" aria-hidden="true"></span>
+            Sign in
+          </a>
+        {/if}
+      </div>
+    {/if}
 
-    <button class="theme-toggle" aria-label="Toggle theme" onclick={toggleTheme}>
-      {#if isDark}
-        ☀
-      {:else}
-        ☾⋆
-      {/if}
-    </button>
+    {#if !settingsState.hideThemeIcon}
+      <button
+        class="theme-toggle"
+        aria-label="Toggle theme"
+        onclick={toggleTheme}
+      >
+        {#if isDark}
+          ☀
+        {:else}
+          ☾⋆
+        {/if}
+      </button>
+    {/if}
   </div>
 
   {@render children()}
