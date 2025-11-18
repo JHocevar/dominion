@@ -5,6 +5,7 @@ import { MongoDBAdapter } from "@auth/mongodb-adapter"
 import clientPromise from "$lib/server/mongodb.server"
 
 export const { handle, signIn, signOut } = SvelteKitAuth({
+  trustHost: true,
   adapter: MongoDBAdapter(clientPromise),
   providers: [
     Google({
