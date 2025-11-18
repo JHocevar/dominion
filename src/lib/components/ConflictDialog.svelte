@@ -1,8 +1,10 @@
 <script lang="ts">
   import { resolveConflict } from "$lib/functions/saving"
 
-  export let conflictData: any
-  export let onResolve: () => void
+  let { conflictData, onResolve } = $props<{
+    conflictData: any,
+    onResolve: () => void
+  }>()
 
   async function handleChoice(choice: "local" | "remote") {
     await resolveConflict(choice, conflictData)
@@ -40,8 +42,6 @@
           Use Cloud Save
         </button>
       </div>
-
-      <p class="warning">⚠️ The other save will be overwritten</p>
     </div>
   </div>
 </div>
@@ -61,25 +61,25 @@
     justify-content: center;
     z-index: 1000;
   }
-  
+
   .modal {
-    background: white;
+    background: var(--bg);
     padding: 2rem;
     border-radius: 8px;
     max-width: 600px;
     width: 90%;
   }
-  
+
   h2 {
     margin-top: 0;
   }
-  
+
   .options {
     display: flex;
     gap: 1rem;
     margin: 1.5rem 0;
   }
-  
+
   .option {
     flex: 1;
     border: 2px solid #ddd;
@@ -87,17 +87,17 @@
     border-radius: 4px;
     text-align: center;
   }
-  
+
   .option h3 {
     margin-top: 0;
   }
-  
+
   .timestamp {
     color: #666;
     font-size: 0.9rem;
     margin: 0.5rem 0;
   }
-  
+
   button {
     padding: 0.5rem 1rem;
     background: #007bff;
@@ -107,17 +107,8 @@
     cursor: pointer;
     font-size: 1rem;
   }
-  
+
   button:hover {
     background: #0056b3;
-  }
-  
-  .warning {
-    text-align: center;
-    color: #856404;
-    background: #fff3cd;
-    padding: 0.5rem;
-    border-radius: 4px;
-    margin-top: 1rem;
   }
 </style>

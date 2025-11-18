@@ -109,7 +109,6 @@ function getDrawCard(cards: Card[]): Card | null {
 
 function getTrashing(cards: Card[]): Card | null {
   const trashers = cards.filter((card) => parseInt(card.Trash) >= 1)
-  console.log("got ", trashers.length, "trashers")
   if (trashers.length > 0) {
     return getRandomCard(trashers)
   }
@@ -121,12 +120,6 @@ function getAttackReaction(cards: Card[]): Card | null {
     card.Text.toLocaleLowerCase().includes(
       "when another player plays an attack"
     )
-  )
-  console.log(
-    "got ",
-    attackReactions.length,
-    "attack reactions",
-    attackReactions
   )
   if (attackReactions.length > 0) {
     return getRandomCard(attackReactions)

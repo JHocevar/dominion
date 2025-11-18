@@ -1,9 +1,11 @@
 import { settingsState } from "$lib/state/settings.svelte"
 import { kingdomState } from "$lib/state/kingdom.svelte"
+import { statsState } from "$lib/state/stats.svelte"
 import { conflictState } from "$lib/state/conflicts.svelte"
 
 const SETTINGS_KEY = "dominion.settings"
 const KINGDOM_KEY = "dominion.kingdom"
+const STATS_KEY = "dominion.stats"
 const TIMESTAMP_KEY = "dominion.lastModified"
 
 export async function saveAll() {
@@ -12,6 +14,7 @@ export async function saveAll() {
   if (typeof localStorage !== "undefined") {
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(settingsState))
     localStorage.setItem(KINGDOM_KEY, JSON.stringify(kingdomState))
+    localStorage.setItem(STATS_KEY, JSON.stringify(statsState))
     localStorage.setItem(TIMESTAMP_KEY, now)
   }
 
@@ -24,6 +27,7 @@ export async function saveAll() {
       body: JSON.stringify({
         settings: settingsState,
         kingdom: kingdomState,
+        stats: statsState,
       }),
     })
 
@@ -37,7 +41,7 @@ export async function saveAll() {
 
 export async function loadAll(): Promise<void> {
   let localTimestamp = null
-  if (typeof localStorage !== 'undefined') {
+  if (typeof localStorage !== "undefined") {
     const timestampStr = localStorage.getItem(TIMESTAMP_KEY)
     if (timestampStr) {
       localTimestamp = new Date(timestampStr)
@@ -54,30 +58,39 @@ export async function loadAll(): Promise<void> {
 
         // Check for conflict
         if (localTimestamp && remoteTimestamp) {
-          const timeDiff = Math.abs(remoteTimestamp.getTime() - localTimestamp.getTime())
-          
-          if (timeDiff > 5000) { // 5 seconds
+          const timeDiff = Math.abs(
+            remoteTimestamp.getTime() - localTimestamp.getTime()
+          )
+
+          if (timeDiff > 5000) {
+            // 5 seconds
             conflictState.showConflict = true
             conflictState.conflictData = {
               local: {
                 settings: loadFromLocalStorage(SETTINGS_KEY),
                 kingdom: loadFromLocalStorage(KINGDOM_KEY),
-                timestamp: localTimestamp
+                stats: loadFromLocalStorage(STATS_KEY),
+                timestamp: localTimestamp,
               },
               remote: {
                 settings: data.settings,
                 kingdom: data.kingdom,
-                timestamp: remoteTimestamp
-              }
+                stats: data.stats,
+                timestamp: remoteTimestamp,
+              },
             }
             return
           }
         }
 
         // No conclift, or remote is newer
-        if (!localTimestamp || (remoteTimestamp && remoteTimestamp > localTimestamp)) {
+        if (
+          !localTimestamp ||
+          (remoteTimestamp && remoteTimestamp > localTimestamp)
+        ) {
           loadStateByMerging(settingsState, data.settings)
           loadStateByMerging(kingdomState, data.kingdom)
+          loadStateByMerging(statsState, data.stats)
           conflictState.showConflict = false
           return
         }
@@ -89,23 +102,28 @@ export async function loadAll(): Promise<void> {
 
   loadKeyFromLocalStorage(SETTINGS_KEY, settingsState)
   loadKeyFromLocalStorage(KINGDOM_KEY, kingdomState)
+  loadKeyFromLocalStorage(STATS_KEY, statsState)
 
   conflictState.showConflict = false
 }
 
-export async function resolveConflict(choice: 'local' | 'remote', conflictData: any) {
-  if (choice === 'remote') {
+export async function resolveConflict(
+  choice: "local" | "remote",
+  conflictData: any
+) {
+  if (choice === "remote") {
     loadStateByMerging(settingsState, conflictData.remote.settings)
     loadStateByMerging(kingdomState, conflictData.remote.kingdom)
   } else {
     loadKeyFromLocalStorage(SETTINGS_KEY, settingsState)
     loadKeyFromLocalStorage(KINGDOM_KEY, kingdomState)
+    loadKeyFromLocalStorage(STATS_KEY, statsState)
   }
   saveAll()
 }
 
 function loadFromLocalStorage(key: string): null | any {
-  if (typeof localStorage === 'undefined') {
+  if (typeof localStorage === "undefined") {
     return null
   }
 
@@ -117,7 +135,7 @@ function loadFromLocalStorage(key: string): null | any {
   try {
     return JSON.parse(raw)
   } catch (e) {
-    console.warn('Error while parsing data from localstorage')
+    console.warn("Error while parsing data from localstorage")
     return null
   }
 }
@@ -135,7 +153,36 @@ function loadStateByMerging(state: any, newState: any): void {
     return
   }
 
-  Object.keys(newState).forEach((k) => {
-    state[k] = newState[k]
-  })
+  function merge(target: any, source: any) {
+    for (const key in source) {
+      switch (true) {
+        case target[key] instanceof Date:
+          target[key] = new Date(source[key])
+          break
+
+        // TODO: Generic version of this
+        case key === "playedKingdoms":
+          target[key] = []
+          source[key].forEach((k: any) => {
+            const x = {
+              date: new Date(k.date),
+              name: k.name,
+              kingdom: k.kingdom,
+              favorite: k.favorite,
+            }
+            target[key].push(x)
+          })
+          break
+
+        case target[key] instanceof Object:
+          merge(target[key], source[key])
+          break
+
+        default:
+          target[key] = source[key]
+      }
+    }
+  }
+
+  merge(state, newState)
 }

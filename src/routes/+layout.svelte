@@ -58,7 +58,6 @@
   $effect(() => {
     const sess = page.data.session
     const userId = sess?.user?.id
-    console.log("Loading data on login")
     loadAll()
   })
 
@@ -78,6 +77,42 @@
     <span></span>
     <span></span>
   </button>
+
+  <div class="top-controls">
+    {#if !settingsState.hideLoginIcon}
+      <div class="auth-indicator">
+        {#if loggedIn}
+          <a
+            href="/stats"
+            onclick={() => (isMenuOpen = false)}
+            class="auth-link"
+          >
+            <span class="status-dot online" aria-hidden="true"></span>
+            {username || "Profile"}
+          </a>
+        {:else}
+          <a href="/stats" class="auth-link">
+            <span class="status-dot offline" aria-hidden="true"></span>
+            Sign in
+          </a>
+        {/if}
+      </div>
+    {/if}
+
+    {#if !settingsState.hideThemeIcon}
+      <button
+        class="theme-toggle"
+        aria-label="Toggle theme"
+        onclick={toggleTheme}
+      >
+        {#if isDark}
+          ☀
+        {:else}
+          ☾⋆
+        {/if}
+      </button>
+    {/if}
+  </div>
 </header>
 
 {#if conflictState.showConflict && conflictState.conflictData}
@@ -89,8 +124,8 @@
 
 <nav class:open={isMenuOpen}>
   <ul>
-    <li class:active={page.url.pathname === "/profile"}>
-      <a href="/profile" onclick={() => (isMenuOpen = false)}>Profile</a>
+    <li class:active={page.url.pathname === "/stats"}>
+      <a href="/stats" onclick={() => (isMenuOpen = false)}>Stats</a>
     </li>
     <li class:active={page.url.pathname === "/database"}>
       <a href="/database" onclick={() => (isMenuOpen = false)}>Database</a>
@@ -113,42 +148,6 @@
 </nav>
 
 <div class="container">
-  <div class="top-controls">
-    {#if !settingsState.hideLoginIcon}
-      <div class="auth-indicator">
-        {#if loggedIn}
-          <a
-            href="/profile"
-            onclick={() => (isMenuOpen = false)}
-            class="auth-link"
-          >
-            <span class="status-dot online" aria-hidden="true"></span>
-            {username || "Profile"}
-          </a>
-        {:else}
-          <a href="/profile" class="auth-link">
-            <span class="status-dot offline" aria-hidden="true"></span>
-            Sign in
-          </a>
-        {/if}
-      </div>
-    {/if}
-
-    {#if !settingsState.hideThemeIcon}
-      <button
-        class="theme-toggle"
-        aria-label="Toggle theme"
-        onclick={toggleTheme}
-      >
-        {#if isDark}
-          ☀
-        {:else}
-          ☾⋆
-        {/if}
-      </button>
-    {/if}
-  </div>
-
   {@render children()}
 </div>
 
@@ -159,6 +158,14 @@
     left: 0;
     padding: 1rem;
     z-index: 1000;
+    display: flex;
+    flex-direction: row;
+  }
+
+  @media (max-width: 740px) {
+    header {
+      position: absolute
+    }
   }
 
   .hamburger {
@@ -226,6 +233,10 @@
   header {
     width: 100%;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    z-index: 0;
   }
 
   .container {
@@ -235,11 +246,10 @@
     margin-top: var(--header-height);
     width: 100%;
     box-sizing: border-box;
-    padding: 0 var(--spacing-base);
+    padding: 0;
   }
 
   .top-controls {
-    width: 100%;
     display: flex;
     justify-content: flex-end;
     gap: 0.5rem;

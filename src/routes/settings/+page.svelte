@@ -323,7 +323,7 @@
   }
 
   .btn-name {
-    min-width: 9rem;
+    min-width: 12rem;
     background-color: #ff4444;
   }
 
@@ -346,6 +346,11 @@
 
     .button-group {
       padding: 0.3rem;
+    }
+
+    .btn-name {
+      min-width: 9rem;
+      background-color: #ff4444;
     }
   }
 

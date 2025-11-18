@@ -24,7 +24,9 @@ export const GET: RequestHandler = async ({ locals }) => {
 
     return json({
       settings: gameData.settings,
-      kingdom: gameData.kingdom
+      kingdom: gameData.kingdom,
+      stats: gameData.stats,
+      updatedAt: gameData.updatedAt
     })
   } catch (error) {
     console.error('Error loading game data:', error)

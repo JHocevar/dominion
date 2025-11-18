@@ -11,7 +11,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
   }
 
   try {
-    const { settings, kingdom } = await request.json()
+    const { settings, kingdom, stats } = await request.json()
 
     const client = await clientPromise
     const db = client.db()
@@ -24,6 +24,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
         $set: {
           settings,
           kingdom,
+          stats,
           updatedAt: now
         },
         $setOnInsert: {

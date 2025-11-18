@@ -1,6 +1,11 @@
 import type { Card } from '$lib/functions/cards'
 
-export const kingdomState = $state<{ cards: Card[], extraCards: Card[] }>({
+export type Kingdom = {
+  cards: Card[]
+  extraCards: Card[]
+}
+
+export const kingdomState = $state<Kingdom>({
   cards: [],
   extraCards: [],
 })
