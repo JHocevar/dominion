@@ -8,7 +8,7 @@ html {
   --font-size-lg: 1.25rem;
   --font-size-xl: 1.5rem;
   --spacing-base: 1rem;
-  --card-width: 600px;
+  --card-width: 700px;
   --header-height: 4rem;
 
   font-family: 'Roboto', sans-serif;
@@ -108,11 +108,12 @@ body {
 /* Mobile breakpoints */
 @media (max-width: 740px) {
   html {
+    --font-size-sm: .85rem;
     --font-size-base: 14px;
     --font-size-lg: 1.15rem;
     --font-size-xl: 1.25rem;
     --spacing-base: 0.75rem;
-    --card-width: 85vw;
+    --card-width: 90vw;
     --header-height: 3rem;
 
     font-size: var(--font-size-base)

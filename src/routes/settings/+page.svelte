@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { settingsState, saveSettings } from "$lib/state/settings.svelte"
+  import { settingsState } from "$lib/state/settings.svelte"
+  import { saveAll } from "$lib/functions/saving"
   import { MediaQuery } from "svelte/reactivity"
 
-  let showSets = true
   let showAdvanced = false
 
   function toggleAllAdvanced() {
@@ -14,19 +14,12 @@
 
 <h1>Settings</h1>
 
-<div class="btn btn-primary">
+<div class="btn btn-primary" style="padding: .75rem;">
   <a href="/generator">Looks good - Let's generate!</a>
 </div>
 
 <div class="header-container">
-  <button
-    class="section-header"
-    onclick={() => (showSets = !showSets)}
-    onkeydown={(e) => e.key === "Enter" && (showSets = !showSets)}
-  >
-    <h2>Card Sets</h2>
-    <span class="dropdown-toggle" class:open={showSets}>▼</span>
-  </button>
+  <h2>Card Sets</h2>
   <button
     class="icon-button"
     onclick={toggleAllAdvanced}
@@ -37,78 +30,78 @@
   </button>
 </div>
 
-{#if showSets}
-  {#each Object.entries(settingsState.sets) as [key, set]}
-    <div class="item">
-      <div class="item-header">
-        <span>{set.name}</span>
-        {#if !showAdvanced || bigEnough.current}
-          <div class={["button-group", showAdvanced ? "column" : "row"]}>
-            {#if set.secondEdition}
-              <button
-                class="btn btn-primary btn-settings btn-small"
-                class:enabled={settingsState.sets[key].secondEditionEnabled}
-                disabled={settingsState.sets[key].enabled === false}
-                onclick={(e) => {
-                  e.preventDefault()
-                  settingsState.sets[key].secondEditionEnabled =
-                    !settingsState.sets[key].secondEditionEnabled
-                  saveSettings()
-                }}
-              >
-                {settingsState.sets[key].secondEditionEnabled ? "2nd" : "1st"}
-              </button>
-            {/if}
+{#each Object.entries(settingsState.sets) as [key, set]}
+{#if !settingsState.sets[key].hidden}
+  <div class="item">
+    <div class="item-header">
+      <span>{set.name}</span>
+      {#if !showAdvanced || bigEnough.current}
+        <div class={["button-group", showAdvanced ? "column" : "row"]}>
+          {#if set.secondEdition}
             <button
-              class="btn btn-primary btn-settings"
-              class:enabled={settingsState.sets[key].enabled}
-              onclick={() => {
-                settingsState.sets[key].enabled =
-                  !settingsState.sets[key].enabled
-                saveSettings()
+              class="btn btn-primary btn-settings btn-small"
+              class:enabled={settingsState.sets[key].secondEditionEnabled}
+              disabled={settingsState.sets[key].enabled === false}
+              onclick={(e) => {
+                e.preventDefault()
+                settingsState.sets[key].secondEditionEnabled =
+                  !settingsState.sets[key].secondEditionEnabled
+                saveAll()
               }}
-              >{settingsState.sets[key].enabled
-                ? "Enabled"
-                : "Disabled"}</button
             >
-          </div>
-        {/if}
-      </div>
-      {#if showAdvanced}
-        <div class="advanced-settings">
-          <div class="setting-row">
-            <label for={`weight-${key}`}>Weight:</label>
-            <input
-              class="input"
-              id={`weight-${key}`}
-              disabled={!settingsState.sets[key].enabled}
-              type="number"
-              min="0"
-              onchange={saveSettings}
-              bind:value={settingsState.sets[key].weight}
-            />
-          </div>
-          <div class="setting-row">
-            <label for={`minCards-${key}`}>Min Cards:</label>
-            <input
-              class="input"
-              id={`minCards-${key}`}
-              disabled={!settingsState.sets[key].enabled}
-              type="number"
-              min="0"
-              onchange={saveSettings}
-              bind:value={settingsState.sets[key].minCards}
-            />
-          </div>
+              {settingsState.sets[key].secondEditionEnabled ? "2nd" : "1st"}
+            </button>
+          {/if}
+          <button
+            class="btn btn-primary btn-settings"
+            class:enabled={settingsState.sets[key].enabled}
+            onclick={() => {
+              settingsState.sets[key].enabled = !settingsState.sets[key].enabled
+              saveAll()
+            }}
+          >
+            {settingsState.sets[key].enabled ? "Enabled" : "Disabled"}
+          </button>
         </div>
       {/if}
     </div>
-  {/each}
+    {#if showAdvanced}
+      <div class="advanced-settings">
+        <div class="setting-row">
+          <label for={`weight-${key}`}>Weight:</label>
+          <input
+            class="input"
+            id={`weight-${key}`}
+            disabled={!settingsState.sets[key].enabled}
+            type="number"
+            min="0"
+            onchange={saveAll}
+            bind:value={settingsState.sets[key].weight}
+          />
+        </div>
+        <div class="setting-row">
+          <label for={`minCards-${key}`}>Min Cards:</label>
+          <input
+            class="input"
+            id={`minCards-${key}`}
+            disabled={!settingsState.sets[key].enabled}
+            type="number"
+            min="0"
+            onchange={saveAll}
+            bind:value={settingsState.sets[key].minCards}
+          />
+        </div>
+      </div>
+    {/if}
+  </div>
 {/if}
+{/each}
 
-<div style="margin: 1rem 0;">
-  <span style="color: red;">{settingsState.bannedCards.length}</span> cards have
-  been banned. Update this list in the
+<h2>Generation Rules</h2>
+
+<div>
+  <span style="color: red;">{settingsState.bannedCards.length}</span>
+  <span>banned cards. Update in the</span>
   <button class="btn btn-primary"><a href="/database">Database</a></button>
 </div>
 
@@ -116,7 +109,7 @@
   <span> Platinum / Colony % per card </span>
   <input
     class="input"
-    onchange={saveSettings}
+    onchange={saveAll}
     bind:value={settingsState.platinumChance}
   />
 </div>
@@ -124,7 +117,7 @@
   <span> Platinum / Colony % with 0 cards </span>
   <input
     class="input"
-    onchange={saveSettings}
+    onchange={saveAll}
     bind:value={settingsState.platinumChanceNoCards}
   />
 </div>
@@ -133,7 +126,7 @@
   <span> Shelters % per card </span>
   <input
     class="input"
-    onchange={saveSettings}
+    onchange={saveAll}
     bind:value={settingsState.shelterChance}
   />
 </div>
@@ -141,7 +134,7 @@
   <span> Shelters % with 0 cards </span>
   <input
     class="input"
-    onchange={saveSettings}
+    onchange={saveAll}
     bind:value={settingsState.shelterChanceNoCards}
   />
 </div>
@@ -154,7 +147,7 @@
       class:enabled={settingsState.requireVillage}
       onclick={() => {
         settingsState.requireVillage = !settingsState.requireVillage
-        saveSettings()
+        saveAll()
       }}
     >
       {settingsState.requireVillage ? "True" : "False"}
@@ -169,7 +162,7 @@
       class:enabled={settingsState.requireDraw}
       onclick={() => {
         settingsState.requireDraw = !settingsState.requireDraw
-        saveSettings()
+        saveAll()
       }}
     >
       {settingsState.requireDraw ? "True" : "False"}
@@ -184,7 +177,7 @@
       class:enabled={settingsState.disableAttack}
       onclick={() => {
         settingsState.disableAttack = !settingsState.disableAttack
-        saveSettings()
+        saveAll()
       }}
     >
       {settingsState.disableAttack ? "True" : "False"}
@@ -199,7 +192,7 @@
       class:enabled={settingsState.requireReaction}
       onclick={() => {
         settingsState.requireReaction = !settingsState.requireReaction
-        saveSettings()
+        saveAll()
       }}
     >
       {settingsState.requireReaction ? "True" : "False"}
@@ -214,10 +207,62 @@
       class:enabled={settingsState.requireTrashing}
       onclick={() => {
         settingsState.requireTrashing = !settingsState.requireTrashing
-        saveSettings()
+        saveAll()
       }}
     >
       {settingsState.requireTrashing ? "True" : "False"}
+    </button>
+  </div>
+</div>
+
+<h2>App Preferences</h2>
+
+<div class="item">
+  <div style="display: flex; flex-direction: column;">
+    <div>Show/hide sets - Hidden sets are disabled</div>
+    <div class="pill-group">
+      {#each Object.entries(settingsState.sets) as [key, set]}
+        <button
+          class="btn btn-primary btn-name"
+          class:enabled={!settingsState.sets[key].hidden}
+          onclick={() => {
+            settingsState.sets[key].hidden = !settingsState.sets[key].hidden
+            saveAll()
+          }}
+        >
+          {settingsState.sets[key].name}
+        </button>
+      {/each}
+    </div>
+  </div>
+</div>
+
+<div class="item">
+  <span>Hide logged-in indicator</span>
+  <div>
+    <button
+      class="btn btn-primary btn-settings"
+      class:enabled={settingsState.hideLoginIcon}
+      onclick={() => {
+        settingsState.hideLoginIcon = !settingsState.hideLoginIcon
+      }}
+    >
+      {settingsState.hideLoginIcon ? "Hidden" : "Visible"}
+    </button>
+  </div>
+</div>
+
+<div class="item">
+  <span>Hide theme indicator</span>
+  <div>
+    <button
+      class="btn btn-primary btn-settings"
+      class:enabled={settingsState.hideThemeIcon}
+      onclick={() => {
+        settingsState.hideThemeIcon = !settingsState.hideThemeIcon
+      }}
+    >
+      {settingsState.hideThemeIcon ? "Hidden" : "Visible"}
     </button>
   </div>
 </div>
@@ -228,50 +273,20 @@
     color: var(--text);
   }
 
+  h2 {
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
   .header-container {
+    position: relative;
     width: var(--card-width);
     display: flex;
     align-items: center;
-    gap: 1rem;
-    margin: 1rem 0;
+    justify-content: center;
     color: var(--text);
+    margin-top: 1rem;
   }
-
-  .section-header {
-    flex-grow: 1;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: inherit;
-    text-align: left;
-  }
-
-  .section-header:hover {
-    background: var(--bg-lighter);
-    border-radius: 8px;
-  }
-
-  .section-header h2 {
-    margin: 0;
-    color: var(--text);
-  }
-
-  .dropdown-toggle {
-    transition: transform 0.3s ease;
-    display: inline-block;
-    font-size: 1.2rem;
-    color: var(--text);
-  }
-
-  .dropdown-toggle.open {
-    transform: rotate(180deg);
-  }
-
-  /* input styles are provided globally in +layout.css as .input */
 
   .item {
     border: 1px solid #ccc;
@@ -286,6 +301,14 @@
     justify-content: space-between;
   }
 
+  .pill-group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem;
+  }
+
   .btn-settings {
     min-width: 100px;
     background-color: #ff4444;
@@ -296,8 +319,16 @@
   }
 
   .btn-small {
-    width: 10px;
     min-width: 40px;
+  }
+
+  .btn-name {
+    min-width: 12rem;
+    background-color: #ff4444;
+  }
+
+  .btn-name.enabled {
+    background-color: #4caf50;
   }
 
   .button-group {
@@ -316,6 +347,11 @@
     .button-group {
       padding: 0.3rem;
     }
+
+    .btn-name {
+      min-width: 9rem;
+      background-color: #ff4444;
+    }
   }
 
   .row {
@@ -332,10 +368,9 @@
     cursor: pointer;
     padding: 0.5rem;
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     transition: all 0.2s ease;
+    position: absolute;
+    right: 0;
   }
 
   .icon-button:hover {

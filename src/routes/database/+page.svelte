@@ -1,8 +1,10 @@
 <script lang="ts">
-  import { settingsState, saveSettings } from "$lib/state/settings.svelte"
+  import { saveAll } from "$lib/functions/saving"
+  import { settingsState } from "$lib/state/settings.svelte"
   import { type Card, loadAllSupplyCards } from "$lib/functions/cards"
   import { loadAllCards } from "$lib/functions/cards"
   import { getAvailableCards } from "$lib/functions/generator"
+  import { statsState } from "$lib/state/stats.svelte"
 
   let filter = $state("")
   let bannedOnly = $state(false)
@@ -18,7 +20,7 @@
     } else {
       settingsState.bannedCards.push(card.Name)
     }
-    saveSettings()
+    saveAll()
   }
 
   let allCards = $derived(loadAllCards())
@@ -99,6 +101,11 @@
       >
         {settingsState.bannedCards.includes(card.Name) ? "Banned" : "In Use"}
       </button>
+      {#if card.Name in statsState.playedCards}
+        <div class="played-count">
+          Played count: <strong>{statsState.playedCards[card.Name]}</strong>
+        </div>
+      {/if}
     </div>
   {/if}
 {/each}
@@ -143,6 +150,12 @@
     right: 1rem;
   }
 
+  .played-count {
+    position: absolute;
+    top: 3.5rem;
+    right: 1rem;
+  }
+
   .banned {
     background: #ff4444;
   }
@@ -176,23 +189,33 @@
   }
 
   .reaction.duration {
-    box-shadow: inset 0 0 10px 4px steelblue, inset 0 0 30px 0.25rem orange;
+    box-shadow:
+      inset 0 0 10px 4px steelblue,
+      inset 0 0 30px 0.25rem orange;
   }
 
   .treasure.victory {
-    box-shadow: inset 0 0 10px 4px gold, inset 0 0 30px 0.25rem lightgreen;
+    box-shadow:
+      inset 0 0 10px 4px gold,
+      inset 0 0 30px 0.25rem lightgreen;
   }
 
   .treasure.duration {
-    box-shadow: inset 0 0 10px 4px yellow, inset 0 0 30px 0.25rem orange;
+    box-shadow:
+      inset 0 0 10px 4px yellow,
+      inset 0 0 30px 0.25rem orange;
   }
 
   .action.victory {
-    box-shadow: inset 0 0 10px 4px lightgrey, inset 0 0 30px 0.25rem lightgreen;
+    box-shadow:
+      inset 0 0 10px 4px lightgrey,
+      inset 0 0 30px 0.25rem lightgreen;
   }
 
   .victory.treasure {
-    box-shadow: inset 0 0 10px 4px lightgreen, inset 0 0 30px 0.25rem gold;
+    box-shadow:
+      inset 0 0 10px 4px lightgreen,
+      inset 0 0 30px 0.25rem gold;
   }
 
   .victory.reaction.duration {

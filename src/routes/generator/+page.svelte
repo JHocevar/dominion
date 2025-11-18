@@ -1,11 +1,55 @@
 <script lang="ts">
   import { generateKingdon, rerollOneCard } from "$lib/functions/generator"
-  import { kingdomState } from "$lib/state/kingdom.svelte"
+  import { kingdomState, type Kingdom } from "$lib/state/kingdom.svelte"
+  import { statsState } from "$lib/state/stats.svelte"
+  import { saveAll } from "$lib/functions/saving"
 
   const fullKingdom = $derived([
     ...kingdomState.cards,
     ...kingdomState.extraCards,
   ])
+
+  const kingdomKey = (k: Kingdom) => {
+    const names = [
+      ...k.cards.map((c) => c.Name),
+      ...k.extraCards.map((c) => c.Name),
+    ]
+    names.sort()
+    return names.join("|")
+  }
+
+  // Derived `saved` value — true when the current kingdom matches any saved kingdom.
+  const saved = $derived.by(() => {
+    saveAll()
+    try {
+      const currentKey = kingdomKey(kingdomState)
+      const x =  statsState.playedKingdoms.some(
+        (entry) => kingdomKey(entry.kingdom) === currentKey,
+      )
+      return x
+    } catch (e) {
+      return false
+    }
+  })
+
+  const dayName = (date: Date, locale?: Intl.LocalesArgument) => date.toLocaleDateString(locale, { weekday: 'long' })
+
+  const saveKingdom = () => {
+    const date = new Date()
+    statsState.playedKingdoms.push({
+      date: date,
+      name: dayName(date),
+      kingdom: JSON.parse(JSON.stringify(kingdomState)),
+      favorite: false,
+    })
+    fullKingdom.forEach((card) => {
+      if (card.Name in statsState.playedCards) {
+        statsState.playedCards[card.Name] += 1
+      } else {
+        statsState.playedCards[card.Name] = 1
+      }
+    })
+  }
 </script>
 
 <h1>Kingdom Generator</h1>
@@ -14,7 +58,7 @@
   <button
     class="btn btn-primary"
     onclick={() => generateKingdon()}
-    style="margin-bottom: 10px;"
+    style="margin-bottom: 10px; padding: .75rem 1.25rem;"
   >
     New Kingdom
   </button>
@@ -44,7 +88,15 @@
   </div>
 {/each}
 
-<!-- </div> -->
+{#if kingdomState.cards.length >= 10}
+<br />
+<button class="btn btn-primary" onclick={() => saveKingdom()} disabled={saved}>
+  Save Kingdom
+</button>
+{#if saved}
+  <div>Kingdom saved</div>
+{/if}
+{/if}
 
 <style>
   .card {
@@ -52,7 +104,7 @@
     padding: 0.25rem;
     font-size: 1.5rem;
     border-radius: 4px;
-    width: 600px;
+    width: var(--card-width);
     max-width: var(--card-width);
     margin: 0.25rem 0;
     display: flex;

@@ -2,6 +2,32 @@
 
 <div class="container">
   <div class="item">
+    <h2>11/17/25</h2>
+    <p>New Features</p>
+    <ul>
+      <li>Added a database MongoDB</li>
+      <li>Added Google login (for remote storage only)</li>
+      <li>Added saving to database as well as localhost</li>
+      <li>Added indicator for logged in status</li>
+      <li>Added '/stats' page to handle login (and other info in the future)</li>
+      <li>Removed card list dropdown (always displays)</li>
+      <li>Added Preferences to settings page (non-functional settings)</li>
+      <ul>
+        <li>Show/Hide sets (remove clutter from unowned sets)</li>
+        <li>Show/Hide logged in and theme change indicators</li>
+      </ul>
+      <li>Added save button for kingdoms and cards played</li>
+      <li>Added played kingdoms to stats page</li>
+      <li>Added played count to entry on database page</li>
+    </ul>
+
+    <p>Fixes</p>
+    <ul>
+      <li>Various Styling</li>
+    </ul>
+  </div>
+
+  <div class="item">
     <h2>11/12/25</h2>
     <p>New Features</p>
     <ul>

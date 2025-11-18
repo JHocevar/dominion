@@ -11,6 +11,8 @@ type SettingsState = {
   requireReaction: boolean
   requireTrashing: boolean
   bannedCards: string[]
+  hideLoginIcon: boolean
+  hideThemeIcon: boolean
 }
 
 type Set = {
@@ -191,49 +193,6 @@ export const settingsState = $state<SettingsState>({
   requireReaction: false,
   requireTrashing: false,
   bannedCards: [],
+  hideLoginIcon: false,
+  hideThemeIcon: false,
 })
-
-const STORAGE_KEY = 'dominion.settings'
-
-export function saveSettings() {
-  try {
-    if (typeof localStorage === 'undefined') return
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(settingsState))
-  } catch (e) {
-    // ignore
-  }
-}
-
-export function loadSettings() {
-  try {
-    if (typeof localStorage === 'undefined') {
-      return
-    }
-
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) {
-      return
-    }
-
-    const parsed = JSON.parse(raw)
-    if (parsed.version !== settingsState.version) {
-      console.warn("Settings schema changed, settings need to be reset to pick up changes")
-      return
-    }
-
-    // shallow merge top-level keys to preserve reactive $state shape
-    Object.keys(parsed).forEach((k) => {
-      // @ts-ignore
-      settingsState[k] = parsed[k]
-    })
-  } catch (e) {
-    // ignore parse errors
-  }
-}
-
-// Attempt to load saved settings in browser only
-try {
-  if (typeof window !== 'undefined') {
-    loadSettings()
-  }
-} catch (e) {}
