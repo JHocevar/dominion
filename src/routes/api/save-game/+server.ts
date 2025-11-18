@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit'
 import type { RequestHandler } from "./$types"
-import clientPromise from "$lib/server/mongodb"
+import clientPromise from "$lib/server/mongodb.server"
 import { ObjectId } from 'mongodb'
 
 export const POST: RequestHandler = async ({ request, locals }) => {
