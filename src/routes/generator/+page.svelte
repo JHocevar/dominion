@@ -65,9 +65,9 @@
       class="btn btn-secondary clear-button"
       onclick={() => (showResetConfirm = true)}
       aria-haspopup="dialog"
-      style="margin-left: .5rem; margin-bottom: 10px; padding: .75rem 1.25rem;"
+      style="margin-bottom: 10px; padding: .75rem 1.25rem;"
     >
-      Clear Kingdom
+      Clear
     </button>
   {/if}
 
@@ -181,6 +181,7 @@
 
   .clear-button {
     position: absolute;
+    margin-left: 0;
     left: 0;
     top: 0;
   }
