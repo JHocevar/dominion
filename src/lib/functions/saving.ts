@@ -9,6 +9,7 @@ const STATS_KEY = "dominion.stats"
 const TIMESTAMP_KEY = "dominion.lastModified"
 
 export async function saveAll() {
+  console.log("Saving all data...")
   const now = new Date().toISOString()
 
   if (typeof localStorage !== "undefined") {

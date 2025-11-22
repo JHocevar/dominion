@@ -1,38 +1,29 @@
 <script lang="ts">
-  import { generateKingdon, rerollOneCard } from "$lib/functions/generator"
+  import { generateKingdon, rerollOneCard, rerollOneEventLikeCard } from "$lib/functions/generator"
+  import { saveAll } from "$lib/functions/saving"
   import { kingdomState, type Kingdom } from "$lib/state/kingdom.svelte"
   import { statsState } from "$lib/state/stats.svelte"
-  import { saveAll } from "$lib/functions/saving"
 
-  const fullKingdom = $derived([
-    ...kingdomState.cards,
-    ...kingdomState.extraCards,
-  ])
+  const fullKingdom = $derived([...kingdomState.cards, ...kingdomState.eventLikeCards, ...kingdomState.extraCards])
 
   const kingdomKey = (k: Kingdom) => {
-    const names = [
-      ...k.cards.map((c) => c.Name),
-      ...k.extraCards.map((c) => c.Name),
-    ]
+    const names = [...k.cards.map((c) => c.Name), ...k.extraCards.map((c) => c.Name)]
     names.sort()
     return names.join("|")
   }
 
   // Derived `saved` value — true when the current kingdom matches any saved kingdom.
   const saved = $derived.by(() => {
-    saveAll()
     try {
       const currentKey = kingdomKey(kingdomState)
-      const x =  statsState.playedKingdoms.some(
-        (entry) => kingdomKey(entry.kingdom) === currentKey,
-      )
+      const x = statsState.playedKingdoms.some((entry) => kingdomKey(entry.kingdom) === currentKey)
       return x
     } catch (e) {
       return false
     }
   })
 
-  const dayName = (date: Date, locale?: Intl.LocalesArgument) => date.toLocaleDateString(locale, { weekday: 'long' })
+  const dayName = (date: Date, locale?: Intl.LocalesArgument) => date.toLocaleDateString(locale, { weekday: "long" })
 
   const saveKingdom = () => {
     const date = new Date()
@@ -49,6 +40,7 @@
         statsState.playedCards[card.Name] = 1
       }
     })
+    saveAll()
   }
 </script>
 
@@ -74,28 +66,34 @@
         .map((x) => x.trim())
         .join(" ")
         .toLowerCase(),
+      kingdomState.extraMappings[card.Name] ? `trait-card` : ``,
     ]}
   >
     <div class="left">
       <span class="name">{card.Name}</span>
       <span class="set">{card.Set}</span>
+      {#if kingdomState.extraMappings[card.Name]}
+        <span class="trait-name">{kingdomState.extraMappings[card.Name].split('-')[1]}</span>
+      {/if}
     </div>
     {#if kingdomState.cards.includes(card)}
       <div class="right">
         <button class="reroll" onclick={() => rerollOneCard(card)}>🎲</button>
+      </div>
+    {:else if kingdomState.eventLikeCards.includes(card)}
+      <div class="right">
+        <button class="reroll" onclick={() => rerollOneEventLikeCard(card)}>🎲</button>
       </div>
     {/if}
   </div>
 {/each}
 
 {#if kingdomState.cards.length >= 10}
-<br />
-<button class="btn btn-primary" onclick={() => saveKingdom()} disabled={saved}>
-  Save Kingdom
-</button>
-{#if saved}
-  <div>Kingdom saved</div>
-{/if}
+  <br />
+  <button class="btn btn-primary" onclick={() => saveKingdom()} disabled={saved}> Save Kingdom </button>
+  {#if saved}
+    <div>Kingdom saved</div>
+  {/if}
 {/if}
 
 <style>
@@ -144,6 +142,13 @@
     font-style: italic;
   }
 
+  .trait-name {
+    font-size: 0.9rem;
+    font-style: italic;
+    font-weight: bold;
+    margin-left: 0.5rem;
+  }
+
   .action {
     background: lightgrey;
   }
@@ -172,6 +177,11 @@
     background: tan;
   }
 
+  .night {
+    background: black;
+    color: white;
+  }
+
   .reaction.duration {
     background: linear-gradient(45deg, steelblue 49%, orange 51%);
   }
@@ -193,12 +203,34 @@
   }
 
   .victory.reaction.duration {
-    background: linear-gradient(
-      45deg,
-      lightgreen 33%,
-      steelblue 34%,
-      steelblue 66%,
-      orange 67%
-    );
+    background: linear-gradient(45deg, lightgreen 33%, steelblue 34%, steelblue 66%, orange 67%);
+  }
+
+  .event {
+    background: #6d7171;
+  }
+
+  .landmark {
+    background: darkgreen;
+  }
+
+  .way {
+    background: lightskyblue;
+  }
+
+  .project {
+    background: lightpink;
+  }
+
+  .trait {
+    background: #7978a9;
+  }
+
+  .trait-card {
+    box-shadow: inset 0 0 16px 0.2em #7978a9;
+  }
+
+  .prophecy {
+    background: #30a4bd;
   }
 </style>

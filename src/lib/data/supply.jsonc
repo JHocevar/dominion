@@ -16,7 +16,8 @@
     "Bat",      // Nocturne
     "Wish",     // Nocturne
     "Horse",    // Menagerie
-    "Key"       // Renaissance
+    "Key",      // Renaissance
+    "Horn"      // Renaissance
   ],
   "nonSupplyCategories": [
     "Event",    // Multiple
@@ -42,5 +43,13 @@
     "Knight"    // Dark Ages, each knight is unique
 
     // TODO: Implement travelers
+  ],
+  "eventLikeCategories": [
+    "Event",    // Adventures, Empires, Menagerie, Plunder
+    "Landmark", // Empires
+    "Project",  // Renaissance
+    "Way",      // Menagerie
+    "Trait",    // Plunder
+    "Prophecy"  // Rising Sun
   ]
 }

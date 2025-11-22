@@ -1,5 +1,5 @@
 type SettingsState = {
-  version: string,
+  version: string
   sets: Record<string, Set>
   platinumChance: number
   platinumChanceNoCards: number
@@ -13,6 +13,8 @@ type SettingsState = {
   bannedCards: string[]
   hideLoginIcon: boolean
   hideThemeIcon: boolean
+  eventLikeCardsMaster: { enabled: boolean; amount: number }
+  eventLikeCards: Record<string, { enabled: boolean; min: number; max: number }>
 }
 
 type Set = {
@@ -30,7 +32,7 @@ type Set = {
 // Taken from https://wiki.dominionstrategy.com/index.php/Sets
 // (Note that Cornucopia and Guilds are together because they are now sold together)
 export const settingsState = $state<SettingsState>({
-  version: '1.1',
+  version: "1.45",
   sets: {
     Base: {
       name: "Base",
@@ -171,7 +173,7 @@ export const settingsState = $state<SettingsState>({
       cardCount: 300,
       secondEdition: false,
       weight: 1,
-      minCards: 0
+      minCards: 0,
     },
     RisingSun: {
       name: "Rising Sun",
@@ -195,4 +197,40 @@ export const settingsState = $state<SettingsState>({
   bannedCards: [],
   hideLoginIcon: false,
   hideThemeIcon: false,
+  eventLikeCardsMaster: {
+    enabled: true,
+    amount: 2
+  },
+  eventLikeCards: {
+    Event: {
+      enabled: true,
+      min: 0,
+      max: 20,
+    },
+    Landmark: {
+      enabled: true,
+      min: 0,
+      max: 20,
+    },
+    Project: {
+      enabled: true,
+      min: 0,
+      max: 20,
+    },
+    Way: {
+      enabled: true,
+      min: 0,
+      max: 20,
+    },
+    Trait: {
+      enabled: true,
+      min: 0,
+      max: 20,
+    },
+    Prophecy: {
+      enabled: true,
+      min: 0,
+      max: 20,
+    },
+  },
 })

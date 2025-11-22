@@ -48,6 +48,9 @@ export const nonSupplyCategories: string[] = supply.nonSupplyCategories
 // Supply piles with multiple cards in a single stack
 export const specialMultiStackCards: string[] = supply.multiStackCards
 
+// Modifyer cards like Events that are chosen at random to be added to the game
+export const eventLikeCards: string[] = supply.eventLikeCategories
+
 export function loadAllCards(): Card[] {
   const records: Card[] = csvParse(cardsData, {
     columns: true,
@@ -88,4 +91,9 @@ export function loadAllSupplyCards(): Card[] {
 export function loadPlatinumColonyCards(): Card[] {
   const allCards = loadAllCards()
   return allCards.filter((card) => ['Platinum', 'Colony'].includes(card.Name))
+}
+
+export function loadAllEventLikeCards(): Card[] {
+  const allCards = loadAllCards()
+  return allCards.filter((card) => eventLikeCards.some((category) => card.Types.includes(category)))
 }

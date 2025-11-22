@@ -18,6 +18,7 @@
   <a href="/generator">Looks good - Let's generate!</a>
 </div>
 
+<!-- Card Sets Banner and Advanced Settings Button -->
 <div class="header-container">
   <h2>Card Sets</h2>
   <button
@@ -30,115 +31,103 @@
   </button>
 </div>
 
+<!-- Card Sets -->
 {#each Object.entries(settingsState.sets) as [key, set]}
-{#if !settingsState.sets[key].hidden}
-  <div class="item">
-    <div class="item-header">
-      <span>{set.name}</span>
-      {#if !showAdvanced || bigEnough.current}
-        <div class={["button-group", showAdvanced ? "column" : "row"]}>
-          {#if set.secondEdition}
+  {#if !settingsState.sets[key].hidden}
+    <div class="item">
+      <div class="item-header">
+        <span>{set.name}</span>
+        {#if !showAdvanced || bigEnough.current}
+          <div class={["button-group", showAdvanced ? "column" : "row"]}>
+            {#if set.secondEdition}
+              <button
+                class="btn btn-primary btn-settings btn-small"
+                class:enabled={settingsState.sets[key].secondEditionEnabled}
+                disabled={settingsState.sets[key].enabled === false}
+                onclick={(e) => {
+                  e.preventDefault()
+                  settingsState.sets[key].secondEditionEnabled = !settingsState.sets[key].secondEditionEnabled
+                  saveAll()
+                }}
+              >
+                {settingsState.sets[key].secondEditionEnabled ? "2nd" : "1st"}
+              </button>
+            {/if}
             <button
-              class="btn btn-primary btn-settings btn-small"
-              class:enabled={settingsState.sets[key].secondEditionEnabled}
-              disabled={settingsState.sets[key].enabled === false}
-              onclick={(e) => {
-                e.preventDefault()
-                settingsState.sets[key].secondEditionEnabled =
-                  !settingsState.sets[key].secondEditionEnabled
+              class="btn btn-primary btn-settings"
+              class:enabled={settingsState.sets[key].enabled}
+              onclick={() => {
+                settingsState.sets[key].enabled = !settingsState.sets[key].enabled
                 saveAll()
               }}
             >
-              {settingsState.sets[key].secondEditionEnabled ? "2nd" : "1st"}
+              {settingsState.sets[key].enabled ? "Enabled" : "Disabled"}
             </button>
-          {/if}
-          <button
-            class="btn btn-primary btn-settings"
-            class:enabled={settingsState.sets[key].enabled}
-            onclick={() => {
-              settingsState.sets[key].enabled = !settingsState.sets[key].enabled
-              saveAll()
-            }}
-          >
-            {settingsState.sets[key].enabled ? "Enabled" : "Disabled"}
-          </button>
+          </div>
+        {/if}
+      </div>
+      {#if showAdvanced}
+        <div class="advanced-settings">
+          <div class="setting-row">
+            <label for={`weight-${key}`}>Weight:</label>
+            <input
+              class="input"
+              id={`weight-${key}`}
+              disabled={!settingsState.sets[key].enabled}
+              type="number"
+              min="0"
+              onchange={saveAll}
+              bind:value={settingsState.sets[key].weight}
+            />
+          </div>
+          <div class="setting-row">
+            <label for={`minCards-${key}`}>Min Cards:</label>
+            <input
+              class="input"
+              id={`minCards-${key}`}
+              disabled={!settingsState.sets[key].enabled}
+              type="number"
+              min="0"
+              onchange={saveAll}
+              bind:value={settingsState.sets[key].minCards}
+            />
+          </div>
         </div>
       {/if}
     </div>
-    {#if showAdvanced}
-      <div class="advanced-settings">
-        <div class="setting-row">
-          <label for={`weight-${key}`}>Weight:</label>
-          <input
-            class="input"
-            id={`weight-${key}`}
-            disabled={!settingsState.sets[key].enabled}
-            type="number"
-            min="0"
-            onchange={saveAll}
-            bind:value={settingsState.sets[key].weight}
-          />
-        </div>
-        <div class="setting-row">
-          <label for={`minCards-${key}`}>Min Cards:</label>
-          <input
-            class="input"
-            id={`minCards-${key}`}
-            disabled={!settingsState.sets[key].enabled}
-            type="number"
-            min="0"
-            onchange={saveAll}
-            bind:value={settingsState.sets[key].minCards}
-          />
-        </div>
-      </div>
-    {/if}
-  </div>
-{/if}
+  {/if}
 {/each}
 
 <h2>Generation Rules</h2>
 
+<!-- Banned Card Notification -->
 <div>
   <span style="color: red;">{settingsState.bannedCards.length}</span>
   <span>banned cards. Update in the</span>
   <button class="btn btn-primary"><a href="/database">Database</a></button>
 </div>
 
+<!-- Platinum and Colony -->
 <div class="item">
   <span> Platinum / Colony % per card </span>
-  <input
-    class="input"
-    onchange={saveAll}
-    bind:value={settingsState.platinumChance}
-  />
+  <input class="input" onchange={saveAll} bind:value={settingsState.platinumChance} />
 </div>
 <div class="item">
   <span> Platinum / Colony % with 0 cards </span>
-  <input
-    class="input"
-    onchange={saveAll}
-    bind:value={settingsState.platinumChanceNoCards}
-  />
+  <input class="input" onchange={saveAll} bind:value={settingsState.platinumChanceNoCards} />
 </div>
 
+<!-- Shelters -->
 <div class="item">
   <span> Shelters % per card </span>
-  <input
-    class="input"
-    onchange={saveAll}
-    bind:value={settingsState.shelterChance}
-  />
+  <input class="input" onchange={saveAll} bind:value={settingsState.shelterChance} />
 </div>
 <div class="item">
   <span> Shelters % with 0 cards </span>
-  <input
-    class="input"
-    onchange={saveAll}
-    bind:value={settingsState.shelterChanceNoCards}
-  />
+  <input class="input" onchange={saveAll} bind:value={settingsState.shelterChanceNoCards} />
 </div>
 
+<!-- Required or Disabled Cards -->
 <div class="item">
   <span>Require Village (+2 actions)</span>
   <div>
@@ -215,6 +204,75 @@
   </div>
 </div>
 
+<div class="item">
+  <div class="event-total">
+    <div style="width: 100%">Events</div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: .35rem;">
+      <button
+        class="btn btn-primary btn-settings"
+        class:enabled={settingsState.eventLikeCardsMaster.enabled}
+        onclick={() => {
+          settingsState.eventLikeCardsMaster.enabled = !settingsState.eventLikeCardsMaster.enabled
+          saveAll()
+        }}
+      >
+        {settingsState.eventLikeCardsMaster.enabled ? "Enabled" : "Disabled"}
+      </button>
+      <input
+        class="input event-input"
+        id="event-like-cards-amount"
+        disabled={!settingsState.eventLikeCardsMaster.enabled}
+        type="number"
+        min="0"
+        max="20"
+        onchange={saveAll}
+        bind:value={settingsState.eventLikeCardsMaster.amount}
+      />
+      <div style="font-size: var(--font-size-xs);">Total</div>
+    </div>
+    <div style="font-size: var(--font-size-sm);">Min / Max</div>
+  </div>
+  <div class="event-box-outer">
+    {#each Object.entries(settingsState.eventLikeCards) as [key, _]}
+      <div class="event-box">
+        <button
+          class="btn btn-primary btn-small btn-events"
+          class:enabled={settingsState.eventLikeCards[key].enabled}
+          onclick={() => {
+            settingsState.eventLikeCards[key].enabled = !settingsState.eventLikeCards[key].enabled
+            saveAll()
+          }}
+        >
+          {key.charAt(0).toUpperCase() + key.slice(1)}s
+        </button>
+        <div style="display: flex; flex-direction: row; justify-content: center;">
+          <input
+            class="input event-input"
+            id={`weight-${key}`}
+            disabled={!settingsState.eventLikeCards[key].enabled}
+            type="number"
+            min="0"
+            max="20"
+            onchange={saveAll}
+            bind:value={settingsState.eventLikeCards[key].min}
+          />
+          <div style="margin: 0 .2rem;">/</div>
+          <input
+            class="input event-input"
+            id={`weight-${key}`}
+            disabled={!settingsState.eventLikeCards[key].enabled}
+            type="number"
+            min="0"
+            max="20"
+            onchange={saveAll}
+            bind:value={settingsState.eventLikeCards[key].max}
+          />
+        </div>
+      </div>
+    {/each}
+  </div>
+</div>
+
 <h2>App Preferences</h2>
 
 <div class="item">
@@ -278,6 +336,25 @@
     margin-bottom: 0.5rem;
   }
 
+  .event-box-outer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem 0;
+    justify-content: space-evenly;
+  }
+
+  .event-total {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    flex-grow: 1;
+    align-self: stretch;
+    min-height: 100%;
+    max-width: 20%;
+  }
+
   .header-container {
     position: relative;
     width: var(--card-width);
@@ -296,6 +373,7 @@
     width: var(--card-width);
     margin: 0.25rem 0;
     display: flex;
+    row-gap: 0.75rem;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
@@ -314,8 +392,15 @@
     background-color: #ff4444;
   }
 
-  .btn-settings.enabled {
+  .btn.enabled {
     background-color: #4caf50;
+  }
+
+  .btn-events {
+    min-width: 80%;
+    width: 100%;
+    background-color: #ff4444;
+    margin-bottom: 0.5rem;
   }
 
   .btn-small {
@@ -338,20 +423,13 @@
     align-items: center;
   }
 
-  @media (max-width: 740px) {
-    .btn-settings {
-      min-width: 60px;
-      padding: 5px 0;
-    }
-
-    .button-group {
-      padding: 0.3rem;
-    }
-
-    .btn-name {
-      min-width: 9rem;
-      background-color: #ff4444;
-    }
+  .event-box {
+    width: 27%;
+    max-width: 27%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
   .row {
@@ -406,6 +484,10 @@
     max-width: 30%;
   }
 
+  .event-box input {
+    padding: 0.5rem 0.75rem;
+  }
+
   .item input {
     max-width: 20%;
   }
@@ -422,5 +504,29 @@
   input[type="number"] {
     -webkit-appearance: none;
     margin: 0;
+  }
+
+  @media (max-width: 740px) {
+    .btn-settings {
+      min-width: 60px;
+      padding: 5px 0;
+    }
+
+    .button-group {
+      padding: 0.3rem;
+    }
+
+    .btn-name {
+      min-width: 9rem;
+      background-color: #ff4444;
+    }
+
+    .event-box-outer {
+      gap: 1rem 0rem;
+    }
+
+    .event-box input {
+      padding: 0.25rem 0.35rem;
+    }
   }
 </style>
