@@ -3,6 +3,7 @@ import { settingsState } from "$lib/state/settings.svelte"
 import { kingdomState } from "$lib/state/kingdom.svelte"
 import {
   blankCard,
+  loadAllCards,
   loadAllSupplyCards,
   loadAllEventLikeCards,
   loadPlatinumColonyCards,
@@ -108,7 +109,7 @@ export function generateKingdon() {
         for (const key of Object.keys(settingsState.eventLikeCards)) {
           const cfg = settingsState.eventLikeCards[key]
           if (!cfg || cfg.enabled === false) continue
-          if (card.Types.includes(key) && typeof cfg.max === 'number') {
+          if (card.Types.includes(key) && typeof cfg.max === "number") {
             const selected = kingdomState.eventLikeCards.filter((c) => c.Types.includes(key)).length
             if (selected >= cfg.max) return false
           }
@@ -125,10 +126,21 @@ export function generateKingdon() {
   }
 
   // Check for trait matching
-  kingdomState.eventLikeCards.filter(card => card.Types.includes("Trait")).forEach(traitCard => {
-    const chosenCard = getRandomCard(kingdomState.cards.filter(c => !kingdomState.extraMappings[c.Name]))
-    kingdomState.extraMappings[chosenCard.Name] = `trait-${traitCard.Name}`
-  })
+  kingdomState.eventLikeCards
+    .filter((card) => card.Types.includes("Trait"))
+    .forEach((traitCard) => {
+      const chosenCard = getRandomCard(kingdomState.cards.filter((c) => !kingdomState.extraMappings[c.Name]))
+      kingdomState.extraMappings[chosenCard.Name] = `trait-${traitCard.Name}`
+    })
+
+  // Check for Liason
+  if (kingdomState.cards.some((card) => card.Types.includes("Liaison"))) {
+    const allies = getAvailableAllies()
+    if (allies.length > 0) {
+      const randomAlly = getRandomCard(allies)
+      kingdomState.eventLikeCards.push(randomAlly)
+    }
+  }
 
   kingdomState.cards.sort((cardA, cardB) => cardA.Name.localeCompare(cardB.Name))
 
@@ -229,6 +241,13 @@ export function getAvailableEventLikeCards(): Card[] {
   )
 }
 
+function getAvailableAllies(): Card[] {
+  const allCards = loadAllCards()
+  return allCards
+    .filter((card) => card.Types.includes("Ally"))
+    .filter((card) => kingdomState.extraCards.every((c) => c.Name !== card.Name))
+}
+
 function usePlatinumColony(kingdomCards: Card[]): boolean {
   const prosperityCards = kingdomCards.filter((card) => card.Set.includes("Prosperity"))
   const prosperityCount = prosperityCards.length
@@ -289,7 +308,7 @@ export function rerollOneEventLikeCard(card: Card): void {
     for (const key of Object.keys(settingsState.eventLikeCards)) {
       const cfg = settingsState.eventLikeCards[key]
       if (!cfg || cfg.enabled === false) continue
-      if (candidate.Types.includes(key) && typeof cfg.max === 'number') {
+      if (candidate.Types.includes(key) && typeof cfg.max === "number") {
         const wouldBe = (simulatedCounts[key] ?? 0) + 1
         if (wouldBe > cfg.max) return true
       }

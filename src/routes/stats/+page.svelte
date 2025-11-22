@@ -562,4 +562,8 @@
   .prophecy {
     box-shadow: inset 0 0 20px 0.25rem #30a4bd;
   }
+
+  .ally {
+    box-shadow: inset 0 0 20px 0.25rem #ada285;
+  }
 </style>

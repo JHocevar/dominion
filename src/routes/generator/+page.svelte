@@ -236,6 +236,10 @@
     color: white;
   }
 
+  .liaison {
+    box-shadow: inset 0 0 12px 0.25em #ada285;
+  }
+
   .reaction.duration {
     background: linear-gradient(45deg, steelblue 49%, orange 51%);
   }
@@ -274,6 +278,10 @@
 
   .project {
     background: lightpink;
+  }
+
+  .ally {
+    background: #ada285
   }
 
   .trait {
