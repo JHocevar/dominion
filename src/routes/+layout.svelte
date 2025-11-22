@@ -236,7 +236,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    z-index: 0;
+    z-index: 1001;
   }
 
   .container {
