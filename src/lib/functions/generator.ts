@@ -18,6 +18,7 @@ export function generateKingdon() {
   kingdomState.cards = []
   kingdomState.extraCards = []
   kingdomState.eventLikeCards = []
+  kingdomState.extraMappings = {}
 
   const availableCards = getAvailableCards()
 
