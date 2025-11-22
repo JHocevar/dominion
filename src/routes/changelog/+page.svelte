@@ -2,6 +2,28 @@
 
 <div class="container">
   <div class="item">
+    <h2>11/21/25</h2>
+    <p>New Features</p>
+    <ul>
+      <li>Added events and simlar cards (landmarks, traits, projects, ways, prophecies, allies)</li>
+      <ul>
+        <li>Traits properly select a card to match with</li>
+        <li>Allies show up when a liaison is present</li>
+        <li>Settings menu to enable/disable and set min/max for each one</li>
+        <li>Styled and color coded</li>
+      </ul>
+      <li>Added clear button to clear out selected kingdom</li>
+      <li>Can add cards to kingdom manually from database</li>
+    </ul>
+
+    <p>Fixes</p>
+    <ul>
+      <li>Various Styling</li>
+      <li>Removed Horn from supply</li>
+    </ul>
+  </div>
+
+  <div class="item">
     <h2>11/17/25</h2>
     <p>New Features</p>
     <ul>

@@ -28,16 +28,17 @@ import github from '$lib/assets/github-mark-white.svg'
     <li>Individual reroll (reroll any card in generated kingdom)</li>
     <li>Banned card list (never added to kingdoms)</li>
     <li>Save data so it persists on page reload</li>
+    <li>Save history of played kingdoms</li>
+    <li>Choose random events, ways, landmarks, etc...</li>
   </ul>
 
   <h2>Planned Features</h2>
 
   <ul>
     <li>Save presets of enabled sets</li>
-    <li>Save history of played kingdoms and (optionally) effect weighting</li>
-    <li>Choose random events, ways, landmarks, etc...</li>
     <li>Add settings to require traveler, tavern mat, exile, etc...</li>
     <li>Fix +coin on card text and other uses (image on table, fix parsing)</li>
+    <li>Weighting card choosing based on played count (prioritize less played with cards)</li>
   </ul>
 </div>
 
