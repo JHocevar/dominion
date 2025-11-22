@@ -126,7 +126,10 @@
 {/each}
 
 {#if kingdomState.cards.length > 0 || kingdomState.eventLikeCards.length > 0}
-<div>{kingdomState.cards.length} cards, {kingdomState.extraCards.length} extra cards, {kingdomState.eventLikeCards.length} events</div>
+  <div>
+    {kingdomState.cards.length} cards, {kingdomState.extraCards.length} extras, {kingdomState.eventLikeCards
+      .length} events
+  </div>
 {/if}
 
 {#if kingdomState.cards.length >= 10}

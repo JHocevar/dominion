@@ -66,8 +66,7 @@
   }
 
   const toggleFavorite = (i: number) => {
-    statsState.playedKingdoms[i].favorite =
-      !statsState.playedKingdoms[i].favorite
+    statsState.playedKingdoms[i].favorite = !statsState.playedKingdoms[i].favorite
     saveAll()
   }
 
@@ -88,11 +87,7 @@
 
 <div class="status">
   <div class="left">
-    <div
-      class="indicator"
-      data-online={page.data.session ? "true" : "false"}
-      aria-hidden="true"
-    ></div>
+    <div class="indicator" data-online={page.data.session ? "true" : "false"} aria-hidden="true"></div>
     <div class="status-text">
       {#if page.data.session}
         <div class="signedInText">
@@ -126,8 +121,7 @@
           <input
             class="rename-input"
             value={renameValue}
-            oninput={(e: Event) =>
-              (renameValue = (e.target as HTMLInputElement).value)}
+            oninput={(e: Event) => (renameValue = (e.target as HTMLInputElement).value)}
           />
           <div class="rename-actions">
             <button class="btn" onclick={() => saveRename(index)}>Save</button>
@@ -144,9 +138,7 @@
         <div class="confirm">
           <span>Delete this saved kingdom?</span>
           <div class="confirm-actions">
-            <button class="btn btn-warning" onclick={() => doDelete(index)}
-              >Yes</button
-            >
+            <button class="btn btn-warning" onclick={() => doDelete(index)}>Yes</button>
             <button class="btn" onclick={() => cancelDelete()}>No</button>
           </div>
         </div>
@@ -168,8 +160,8 @@
         {/each}
       </div>
 
-      <div style="height: 10px;"></div>
       {#if kingdom.kingdom.extraCards.length > 0}
+        <div style="height: 10px;"></div>
         <div class="kingdom">
           {#each kingdom.kingdom.extraCards as card}
             <div
@@ -186,6 +178,30 @@
           {/each}
         </div>
       {/if}
+
+      {#if kingdom.kingdom.eventLikeCards.length > 0}
+        <div style="height: 10px;"></div>
+        <div class="kingdom">
+          {#each kingdom.kingdom.eventLikeCards as card}
+            <div
+              class={[
+                "card",
+                card?.Types.split("-")
+                  .map((x) => x.trim())
+                  .join(" ")
+                  .toLowerCase(),
+              ]}
+            >
+              {card.Name}
+            </div>
+          {/each}
+        </div>
+      {/if}
+      <div style="height: 5px;"></div>
+      <div style="text-align: center; font-size: var(--font-size-base);">
+        {kingdom.kingdom.cards.length} cards, {kingdom.kingdom.extraCards.length} extras, {kingdom.kingdom.eventLikeCards
+          .length} events
+      </div>
     </div>
 
     {#if editingIndex !== index}
@@ -196,8 +212,7 @@
           tabindex="0"
           title="Toggle favorite"
           onclick={() => toggleFavorite(index)}
-          onkeydown={(e: KeyboardEvent) =>
-            (e.key === "Enter" || e.key === " ") && toggleFavorite(index)}
+          onkeydown={(e: KeyboardEvent) => (e.key === "Enter" || e.key === " ") && toggleFavorite(index)}
           class:active={kingdom.favorite}
         >
           {kingdom.favorite ? "★" : "☆"}
@@ -209,9 +224,7 @@
           tabindex="0"
           title="Rename"
           onclick={() => startRename(index, kingdom.name)}
-          onkeydown={(e: KeyboardEvent) =>
-            (e.key === "Enter" || e.key === " ") &&
-            startRename(index, kingdom.name)}
+          onkeydown={(e: KeyboardEvent) => (e.key === "Enter" || e.key === " ") && startRename(index, kingdom.name)}
         >
           ✏️
         </span>
@@ -222,8 +235,7 @@
           tabindex="0"
           title="Delete"
           onclick={() => requestDelete(index)}
-          onkeydown={(e: KeyboardEvent) =>
-            (e.key === "Enter" || e.key === " ") && requestDelete(index)}
+          onkeydown={(e: KeyboardEvent) => (e.key === "Enter" || e.key === " ") && requestDelete(index)}
         >
           ✖
         </span>
@@ -464,8 +476,6 @@
     }
   }
 
-
-
   .action {
     box-shadow: inset 0 0 20px 0.25rem lightgrey;
   }
@@ -495,33 +505,61 @@
   }
 
   .reaction.duration {
-    box-shadow: inset 0 0 10px 4px steelblue, inset 0 0 30px 0.25rem orange;
+    box-shadow:
+      inset 0 0 10px 4px steelblue,
+      inset 0 0 30px 0.25rem orange;
   }
 
   .treasure.victory {
-    box-shadow: inset 0 0 10px 4px gold, inset 0 0 30px 0.25rem lightgreen;
+    box-shadow:
+      inset 0 0 10px 4px gold,
+      inset 0 0 30px 0.25rem lightgreen;
   }
 
   .treasure.duration {
-    box-shadow: inset 0 0 10px 4px yellow, inset 0 0 30px 0.25rem orange;
+    box-shadow:
+      inset 0 0 10px 4px yellow,
+      inset 0 0 30px 0.25rem orange;
   }
 
   .action.victory {
-    box-shadow: inset 0 0 10px 4px lightgrey, inset 0 0 30px 0.25rem lightgreen;
+    box-shadow:
+      inset 0 0 10px 4px lightgrey,
+      inset 0 0 30px 0.25rem lightgreen;
   }
 
   .victory.treasure {
-    box-shadow: inset 0 0 10px 4px lightgreen, inset 0 0 30px 0.25rem gold;
+    box-shadow:
+      inset 0 0 10px 4px lightgreen,
+      inset 0 0 30px 0.25rem gold;
   }
 
   .victory.reaction.duration {
     box-shadow: none;
-    background: linear-gradient(
-      45deg,
-      lightgreen 33%,
-      steelblue 34%,
-      steelblue 66%,
-      orange 67%
-    );
+    background: linear-gradient(45deg, lightgreen 33%, steelblue 34%, steelblue 66%, orange 67%);
+  }
+
+  .event {
+    box-shadow: inset 0 0 20px 0.25rem #6d7171;
+  }
+
+  .landmark {
+    box-shadow: inset 0 0 20px 0.25rem darkgreen;
+  }
+
+  .way {
+    box-shadow: inset 0 0 20px 0.25rem lightskyblue;
+  }
+
+  .project {
+    box-shadow: inset 0 0 20px 0.25rem lightpink;
+  }
+
+  .trait {
+    box-shadow: inset 0 0 20px 0.25rem #7978a9;
+  }
+
+  .prophecy {
+    box-shadow: inset 0 0 20px 0.25rem #30a4bd;
   }
 </style>
