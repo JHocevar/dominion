@@ -3,6 +3,7 @@
   import { saveAll } from "$lib/functions/saving"
   import { kingdomState, type Kingdom } from "$lib/state/kingdom.svelte"
   import { statsState } from "$lib/state/stats.svelte"
+  import { onMount } from "svelte"
 
   const fullKingdom = $derived([...kingdomState.cards, ...kingdomState.eventLikeCards, ...kingdomState.extraCards])
 
@@ -42,11 +43,34 @@
     })
     saveAll()
   }
+
+  // Reset / clear kingdom flow
+  let showResetConfirm = $state(false)
+
+  const clearKingdom = () => {
+    kingdomState.cards = []
+    kingdomState.extraCards = []
+    kingdomState.eventLikeCards = []
+    kingdomState.extraMappings = {}
+    saveAll()
+    showResetConfirm = false
+  }
 </script>
 
 <h1>Kingdom Generator</h1>
 
 <div class="wrapper">
+  {#if kingdomState.cards.length > 1 || kingdomState.eventLikeCards.length > 0}
+    <button
+      class="btn btn-secondary clear-button"
+      onclick={() => (showResetConfirm = true)}
+      aria-haspopup="dialog"
+      style="margin-left: .5rem; margin-bottom: 10px; padding: .75rem 1.25rem;"
+    >
+      Clear Kingdom
+    </button>
+  {/if}
+
   <button
     class="btn btn-primary"
     onclick={() => generateKingdon()}
@@ -57,6 +81,19 @@
 
   <div class="link-to-settings"><a href="/settings">⚙️</a></div>
 </div>
+
+{#if showResetConfirm}
+  <div class="modal-overlay" role="dialog" aria-modal="true" aria-label="Confirm clear kingdom">
+    <div class="modal">
+      <h2>Clear current kingdom?</h2>
+      <p>This will remove all cards, events and extra mappings. This cannot be undone.</p>
+      <div class="modal-actions">
+        <button class="btn" onclick={() => (showResetConfirm = false)}>Cancel</button>
+        <button class="btn btn-danger" onclick={() => clearKingdom()}>Confirm Clear</button>
+      </div>
+    </div>
+  </div>
+{/if}
 
 {#each fullKingdom as card}
   <div
@@ -73,7 +110,7 @@
       <span class="name">{card.Name}</span>
       <span class="set">{card.Set}</span>
       {#if kingdomState.extraMappings[card.Name]}
-        <span class="trait-name">{kingdomState.extraMappings[card.Name].split('-')[1]}</span>
+        <span class="trait-name">{kingdomState.extraMappings[card.Name].split("-")[1]}</span>
       {/if}
     </div>
     {#if kingdomState.cards.includes(card)}
@@ -90,10 +127,14 @@
 
 {#if kingdomState.cards.length >= 10}
   <br />
-  <button class="btn btn-primary" onclick={() => saveKingdom()} disabled={saved}> Save Kingdom </button>
-  {#if saved}
-    <div>Kingdom saved</div>
-  {/if}
+  <button
+    class="btn btn-primary"
+    style="margin-bottom: 10px; padding: .75rem 1.25rem;"
+    onclick={() => saveKingdom()}
+    disabled={saved}
+  >
+    Save Kingdom
+  </button>
 {/if}
 
 <style>
@@ -129,6 +170,12 @@
     right: 0;
     top: 0;
     font-size: var(--font-size-xl);
+  }
+
+  .clear-button {
+    position: absolute;
+    left: 0;
+    top: 0;
   }
 
   a {
@@ -232,5 +279,44 @@
 
   .prophecy {
     background: #30a4bd;
+  }
+
+  /* Modal styles for clear confirmation */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1200;
+    padding: 1rem;
+  }
+
+  .modal {
+    background: var(--bg);
+    color: var(--text);
+    padding: 1.25rem;
+    border-radius: 8px;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .btn-secondary {
+    background: #777;
+    color: white;
+  }
+
+  .btn-danger {
+    background: #c62828;
+    color: white;
   }
 </style>

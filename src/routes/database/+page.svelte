@@ -1,9 +1,10 @@
 <script lang="ts">
   import { saveAll } from "$lib/functions/saving"
   import { settingsState } from "$lib/state/settings.svelte"
+  import { kingdomState } from "$lib/state/kingdom.svelte"
   import { type Card, loadAllSupplyCards } from "$lib/functions/cards"
   import { loadAllCards } from "$lib/functions/cards"
-  import { getAvailableCards } from "$lib/functions/generator"
+  import { getAvailableCards, getAvailableEventLikeCards } from "$lib/functions/generator"
   import { statsState } from "$lib/state/stats.svelte"
 
   let filter = $state("")
@@ -45,6 +46,24 @@
     }
     return cards
   })
+
+  const addCardToKingdom = (card: Card) => {
+    console.log('trying to add ', card.Name, 'to kingdom')
+    const availableCards = getAvailableCards()
+    console.log('available cards:', availableCards.map(c => c.Name).join(', '))
+    if (availableCards.some((c) => c.Name === card.Name)) {
+      console.log('added ', card.Name, 'to kingdom')
+      kingdomState.cards.push(card)
+      saveAll()
+    }
+
+    const availableEventLikeCards = getAvailableEventLikeCards()
+    if (availableEventLikeCards.some((c) => c.Name === card.Name)) {
+      kingdomState.eventLikeCards.push(card)
+      console.log('added ', card.Name, 'to kingdom')
+      saveAll()
+    }
+  }
 </script>
 
 <h1>Dominion Cards</h1>
@@ -94,6 +113,13 @@
       <div><strong>{card.Types}</strong></div>
       <br />
       <div>{card.Text}</div>
+      <button
+        class="btn btn-primary btn-add"
+        class:banned={kingdomState.cards.some(c => c.Name === card.Name) || kingdomState.eventLikeCards.some(c => c.Name === card.Name)}
+        onclick={() => addCardToKingdom(card)}
+      >
+        Add to Kingdom
+      </button>
       <button
         class="btn btn-primary btn-ban"
         class:banned={settingsState.bannedCards.includes(card.Name)}
@@ -148,6 +174,18 @@
     position: absolute;
     top: 1rem;
     right: 1rem;
+  }
+
+  .btn-add {
+    position: absolute;
+    top: 1rem;
+    right: 7rem;
+  }
+
+  @media (max-width: 740px) {
+    .btn-add {
+      right:  5rem;
+    }
   }
 
   .played-count {
