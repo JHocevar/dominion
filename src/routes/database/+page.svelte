@@ -48,11 +48,8 @@
   })
 
   const addCardToKingdom = (card: Card) => {
-    console.log('trying to add ', card.Name, 'to kingdom')
     const availableCards = getAvailableCards()
-    console.log('available cards:', availableCards.map(c => c.Name).join(', '))
     if (availableCards.some((c) => c.Name === card.Name)) {
-      console.log('added ', card.Name, 'to kingdom')
       kingdomState.cards.push(card)
       saveAll()
     }
@@ -60,7 +57,6 @@
     const availableEventLikeCards = getAvailableEventLikeCards()
     if (availableEventLikeCards.some((c) => c.Name === card.Name)) {
       kingdomState.eventLikeCards.push(card)
-      console.log('added ', card.Name, 'to kingdom')
       saveAll()
     }
   }
