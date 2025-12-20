@@ -3,13 +3,19 @@
   import { saveAll } from "$lib/functions/saving"
   import { MediaQuery } from "svelte/reactivity"
 
-  let showAdvanced = false
+  let showAdvanced = $state(false)
 
   function toggleAllAdvanced() {
     showAdvanced = !showAdvanced
   }
 
   let bigEnough = new MediaQuery("min-width: 375px")
+
+  // percentage display helpers (store whole numbers for the inputs)
+  let platinumPercent = $derived(Math.round(settingsState.platinumChance * 100))
+  let platinumNoCardsPercent = $derived(Math.round(settingsState.platinumChanceNoCards * 100))
+  let shelterPercent = $derived(Math.round(settingsState.shelterChance * 100))
+  let shelterNoCardsPercent = $derived(Math.round(settingsState.shelterChanceNoCards * 100))
 </script>
 
 <h1>Settings</h1>
@@ -110,21 +116,73 @@
 <!-- Platinum and Colony -->
 <div class="item">
   <span> Platinum / Colony % per card </span>
-  <input class="input" onchange={saveAll} bind:value={settingsState.platinumChance} />
+  <div style="display:flex; align-items:center; gap:0.5rem;">
+    <input
+      class="input"
+      type="number"
+      min="0"
+      max="100"
+      bind:value={platinumPercent}
+      onchange={() => {
+        settingsState.platinumChance = Number(platinumPercent) / 100
+        saveAll()
+      }}
+    />
+    <span>%</span>
+  </div>
 </div>
 <div class="item">
   <span> Platinum / Colony % with 0 cards </span>
-  <input class="input" onchange={saveAll} bind:value={settingsState.platinumChanceNoCards} />
+  <div style="display:flex; align-items:center; gap:0.5rem;">
+    <input
+      class="input"
+      type="number"
+      min="0"
+      max="100"
+      bind:value={platinumNoCardsPercent}
+      onchange={() => {
+        settingsState.platinumChanceNoCards = Number(platinumNoCardsPercent) / 100
+        saveAll()
+      }}
+    />
+    <span>%</span>
+  </div>
 </div>
 
 <!-- Shelters -->
 <div class="item">
   <span> Shelters % per card </span>
-  <input class="input" onchange={saveAll} bind:value={settingsState.shelterChance} />
+  <div style="display:flex; align-items:center; gap:0.5rem;">
+    <input
+      class="input"
+      type="number"
+      min="0"
+      max="100"
+      bind:value={shelterPercent}
+      onchange={() => {
+        settingsState.shelterChance = Number(shelterPercent) / 100
+        saveAll()
+      }}
+    />
+    <span>%</span>
+  </div>
 </div>
 <div class="item">
   <span> Shelters % with 0 cards </span>
-  <input class="input" onchange={saveAll} bind:value={settingsState.shelterChanceNoCards} />
+  <div style="display:flex; align-items:center; gap:0.5rem;">
+    <input
+      class="input"
+      type="number"
+      min="0"
+      max="100"
+      bind:value={shelterNoCardsPercent}
+      onchange={() => {
+        settingsState.shelterChanceNoCards = Number(shelterNoCardsPercent) / 100
+        saveAll()
+      }}
+    />
+    <span>%</span>
+  </div>
 </div>
 
 <!-- Required or Disabled Cards -->
@@ -503,6 +561,8 @@
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"] {
     -webkit-appearance: none;
+    appearance: textfield;
+    -moz-appearance: textfield;
     margin: 0;
   }
 

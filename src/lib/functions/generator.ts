@@ -18,6 +18,7 @@ export function generateKingdon() {
   kingdomState.cards = []
   kingdomState.extraCards = []
   kingdomState.eventLikeCards = []
+  kingdomState.extraMappings = {}
 
   const availableCards = getAvailableCards()
 
@@ -80,6 +81,15 @@ export function generateKingdon() {
     })
   }
 
+  // Check for Liason
+  if (kingdomState.cards.some((card) => card.Types.includes("Liaison"))) {
+    const allies = getAvailableAllies()
+    if (allies.length > 0) {
+      const randomAlly = getRandomCard(allies)
+      kingdomState.eventLikeCards.push(randomAlly)
+    }
+  }
+
   // Event-like cards
   if (settingsState.eventLikeCardsMaster.enabled) {
     const availableEventLikeCards = getAvailableEventLikeCards()
@@ -132,15 +142,6 @@ export function generateKingdon() {
       const chosenCard = getRandomCard(kingdomState.cards.filter((c) => !kingdomState.extraMappings[c.Name]))
       kingdomState.extraMappings[chosenCard.Name] = `trait-${traitCard.Name}`
     })
-
-  // Check for Liason
-  if (kingdomState.cards.some((card) => card.Types.includes("Liaison"))) {
-    const allies = getAvailableAllies()
-    if (allies.length > 0) {
-      const randomAlly = getRandomCard(allies)
-      kingdomState.eventLikeCards.push(randomAlly)
-    }
-  }
 
   kingdomState.cards.sort((cardA, cardB) => cardA.Name.localeCompare(cardB.Name))
 
