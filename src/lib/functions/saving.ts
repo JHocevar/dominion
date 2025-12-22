@@ -9,7 +9,6 @@ const STATS_KEY = "dominion.stats"
 const TIMESTAMP_KEY = "dominion.lastModified"
 
 export async function saveAll() {
-  console.log("Saving all data...")
   const now = new Date().toISOString()
 
   if (typeof localStorage !== "undefined") {
@@ -59,9 +58,7 @@ export async function loadAll(): Promise<void> {
 
         // Check for conflict
         if (localTimestamp && remoteTimestamp) {
-          const timeDiff = Math.abs(
-            remoteTimestamp.getTime() - localTimestamp.getTime()
-          )
+          const timeDiff = Math.abs(remoteTimestamp.getTime() - localTimestamp.getTime())
 
           if (timeDiff > 5000) {
             // 5 seconds
@@ -85,10 +82,7 @@ export async function loadAll(): Promise<void> {
         }
 
         // No conclift, or remote is newer
-        if (
-          !localTimestamp ||
-          (remoteTimestamp && remoteTimestamp > localTimestamp)
-        ) {
+        if (!localTimestamp || (remoteTimestamp && remoteTimestamp > localTimestamp)) {
           loadStateByMerging(settingsState, data.settings)
           loadStateByMerging(kingdomState, data.kingdom)
           loadStateByMerging(statsState, data.stats)
@@ -108,13 +102,11 @@ export async function loadAll(): Promise<void> {
   conflictState.showConflict = false
 }
 
-export async function resolveConflict(
-  choice: "local" | "remote",
-  conflictData: any
-) {
+export async function resolveConflict(choice: "local" | "remote", conflictData: any) {
   if (choice === "remote") {
     loadStateByMerging(settingsState, conflictData.remote.settings)
     loadStateByMerging(kingdomState, conflictData.remote.kingdom)
+    loadStateByMerging(statsState, conflictData.remote.stats)
   } else {
     loadKeyFromLocalStorage(SETTINGS_KEY, settingsState)
     loadKeyFromLocalStorage(KINGDOM_KEY, kingdomState)
