@@ -13,6 +13,7 @@
   let isDark = $state(true)
   const loggedIn = $derived.by(() => !!page.data?.session?.user?.id)
   const username = $derived.by(() => page.data?.session?.user?.name ?? "")
+  const hasQueryParamForLoadingKingdom = $derived.by(() => page.url.searchParams.get('kingdomId') !== '')
 
   function toggleMenu() {
     isMenuOpen = !isMenuOpen
@@ -52,13 +53,14 @@
   })
 
   onMount(async () => {
-    await loadAll()
+    console.log('hasQueryParamForLoadingKingdom', hasQueryParamForLoadingKingdom)
+    await loadAll(hasQueryParamForLoadingKingdom)
   })
 
   $effect(() => {
     const sess = page.data.session
     const userId = sess?.user?.id
-    loadAll()
+    loadAll(hasQueryParamForLoadingKingdom)
   })
 
   function handleResolve() {
@@ -119,6 +121,7 @@
   <ConflictDialog
     conflictData={conflictState.conflictData}
     onResolve={handleResolve}
+    hasQueryParamForLoadingKingdom={hasQueryParamForLoadingKingdom}
   />
 {/if}
 

@@ -1,13 +1,14 @@
 <script lang="ts">
   import { resolveConflict } from "$lib/functions/saving"
 
-  let { conflictData, onResolve } = $props<{
+  let { conflictData, onResolve, hasQueryParamForLoadingKingdom } = $props<{
     conflictData: any,
+    hasQueryParamForLoadingKingdom: boolean,
     onResolve: () => void
   }>()
 
   async function handleChoice(choice: "local" | "remote") {
-    await resolveConflict(choice, conflictData)
+    await resolveConflict(choice, conflictData, hasQueryParamForLoadingKingdom)
     onResolve()
   }
 

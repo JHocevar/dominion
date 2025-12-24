@@ -8,8 +8,8 @@ export const load: LayoutServerLoad = async (event) => {
 }
 
 // Attempt to load saved settings in browser only
-try {
-  if (typeof window !== 'undefined') {
-    loadAll()
-  }
-} catch (e) {}
+// try {
+//   if (typeof window !== 'undefined') {
+//     loadAll()
+//   }
+// } catch (e) {}

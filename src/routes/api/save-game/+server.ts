@@ -18,7 +18,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
     const userId = new ObjectId(session.user.id)
     const now = new Date()
 
-    await db.collection('gameData').updateOne(
+    await db.collection('userData').updateOne(
       { userId },
       {
         $set: {

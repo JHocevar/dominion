@@ -1,9 +1,23 @@
 <script lang="ts">
   import { generateKingdon, rerollOneCard, rerollOneEventLikeCard } from "$lib/functions/generator"
-  import { saveAll } from "$lib/functions/saving"
+  import { saveAll, saveKingdomToDb } from "$lib/functions/saving"
   import { kingdomState, type Kingdom } from "$lib/state/kingdom.svelte"
   import { statsState } from "$lib/state/stats.svelte"
   import { onMount } from "svelte"
+  import type { PageProps } from './$types'
+
+  const { data }: PageProps = $props()
+
+  let importedKingdom = false
+  onMount(() => {
+    if (data?.kingdom) {
+      importedKingdom = true
+      kingdomState.cards = data.kingdom.cards
+      kingdomState.eventLikeCards = data.kingdom.eventLikeCards
+      kingdomState.extraCards = data.kingdom.extraCards
+      kingdomState.extraMappings = data.kingdom.extraMappings
+    }
+  })
 
   const fullKingdom = $derived([...kingdomState.cards, ...kingdomState.eventLikeCards, ...kingdomState.extraCards])
 
@@ -26,23 +40,35 @@
 
   const dayName = (date: Date, locale?: Intl.LocalesArgument) => date.toLocaleDateString(locale, { weekday: "long" })
 
-  const saveKingdom = () => {
-    const date = new Date()
-    statsState.playedKingdoms.push({
-      date: date,
-      name: dayName(date),
-      kingdom: JSON.parse(JSON.stringify(kingdomState)),
-      favorite: false,
-    })
-    fullKingdom.forEach((card) => {
-      if (card.Name in statsState.playedCards) {
-        statsState.playedCards[card.Name] += 1
-      } else {
-        statsState.playedCards[card.Name] = 1
-      }
-    })
-    saveAll()
+  const saveKingdom = async () => {
+    // Need to save kingdom first to get the ID from the database
+    await saveKingdomToDb()
+
+    console.log("kingdom id after load is", kingdomState.kingdomId)
+
+    try {
+
+      const date = new Date()
+      statsState.playedKingdoms.push({
+        date: date,
+        name: dayName(date),
+        kingdom: JSON.parse(JSON.stringify(kingdomState)),
+        favorite: false,
+      })
+      fullKingdom.forEach((card) => {
+        if (card.Name in statsState.playedCards) {
+          statsState.playedCards[card.Name] += 1
+        } else {
+          statsState.playedCards[card.Name] = 1
+        }
+      })
+      await saveAll()
+    } catch (e) {
+      console.error("Error saving kingdom:", e)
+    }
   }
+
+  console.log("kingdom id after statsState block", kingdomState.kingdomId)
 
   // Reset / clear kingdom flow
   let showResetConfirm = $state(false)

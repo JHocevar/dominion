@@ -4,6 +4,8 @@
   import { statsState } from "$lib/state/stats.svelte"
   import { kingdomState } from "$lib/state/kingdom.svelte"
   import { saveAll } from "$lib/functions/saving"
+  import QRCode from "$lib/components/QRCode.svelte"
+  import { PUBLIC_SERVER_URL } from "$env/static/public"
 
   // Local UI state for actions on the list
   let confirmDeleteIndex = -1
@@ -76,6 +78,19 @@
     // replace current kingdom with saved one (make shallow copies)
     kingdomState.cards = [...(entry.kingdom.cards ?? [])]
     kingdomState.extraCards = [...(entry.kingdom.extraCards ?? [])]
+  }
+
+  let showQR = false
+  let qrAddress = ""
+
+  function openQR(kingdomId: string) {
+    qrAddress = `${PUBLIC_SERVER_URL}/generator?kingdomId=${encodeURIComponent(kingdomId)}`
+    showQR = true
+  }
+
+  function closeQR() {
+    showQR = false
+    qrAddress = ""
   }
 </script>
 
@@ -250,10 +265,25 @@
         >
           ➤
         </a>
+        <span
+          class="icon qr"
+          role="button"
+          tabindex="0"
+          title="Show QR code"
+          onclick={() => openQR(kingdom.kingdom.kingdomId)}
+          onkeydown={(e: KeyboardEvent) => (e.key === 'Enter' || e.key === ' ') && openQR(kingdom.kingdom.kingdomId)}
+        >
+          📱
+        </span>
       </div>
     {/if}
   </div>
 {/each}
+
+
+{#if showQR}
+  <QRCode address={qrAddress} onClose={closeQR} />
+{/if}
 
 <style>
   :global(.btn) {

@@ -2,6 +2,7 @@ import { settingsState } from "$lib/state/settings.svelte"
 import { kingdomState } from "$lib/state/kingdom.svelte"
 import { statsState } from "$lib/state/stats.svelte"
 import { conflictState } from "$lib/state/conflicts.svelte"
+import { page } from "$app/state"
 
 const SETTINGS_KEY = "dominion.settings"
 const KINGDOM_KEY = "dominion.kingdom"
@@ -39,7 +40,30 @@ export async function saveAll() {
   }
 }
 
-export async function loadAll(): Promise<void> {
+export async function saveKingdomToDb() {
+  try {
+    const response = await fetch("/api/save-kingdom", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ kingdom: kingdomState }),
+    })
+
+    if (!response.ok) {
+      console.error("Failed to save kingdom to database")
+    }
+    console.log("saved kingdom, got back from server:", response)
+    const data = await response.json()
+    console.log("id is:", data.kingdomId)
+    kingdomState.kingdomId = data.kingdomId
+    console.log(kingdomState.kingdomId)
+  } catch (error) {
+    console.error("Error saving kingdom to database:", error)
+  }
+}
+
+export async function loadAll(skipKingdom: boolean = false): Promise<void> {
   let localTimestamp = null
   if (typeof localStorage !== "undefined") {
     const timestampStr = localStorage.getItem(TIMESTAMP_KEY)
@@ -84,8 +108,13 @@ export async function loadAll(): Promise<void> {
         // No conclift, or remote is newer
         if (!localTimestamp || (remoteTimestamp && remoteTimestamp > localTimestamp)) {
           loadStateByMerging(settingsState, data.settings)
-          loadStateByMerging(kingdomState, data.kingdom)
           loadStateByMerging(statsState, data.stats)
+          if (skipKingdom) {
+            console.log('loading kingdom state')
+          } else {
+            console.log('skipping kingdom load')
+            loadStateByMerging(kingdomState, data.kingdom)
+          }
           conflictState.showConflict = false
           return
         }
@@ -96,20 +125,20 @@ export async function loadAll(): Promise<void> {
   }
 
   loadKeyFromLocalStorage(SETTINGS_KEY, settingsState)
-  loadKeyFromLocalStorage(KINGDOM_KEY, kingdomState)
+  if (!skipKingdom) loadKeyFromLocalStorage(KINGDOM_KEY, kingdomState)
   loadKeyFromLocalStorage(STATS_KEY, statsState)
 
   conflictState.showConflict = false
 }
 
-export async function resolveConflict(choice: "local" | "remote", conflictData: any) {
+export async function resolveConflict(choice: "local" | "remote", conflictData: any, skipKingdom: boolean = false) {
   if (choice === "remote") {
     loadStateByMerging(settingsState, conflictData.remote.settings)
-    loadStateByMerging(kingdomState, conflictData.remote.kingdom)
+    if (!skipKingdom) loadStateByMerging(kingdomState, conflictData.remote.kingdom)
     loadStateByMerging(statsState, conflictData.remote.stats)
   } else {
     loadKeyFromLocalStorage(SETTINGS_KEY, settingsState)
-    loadKeyFromLocalStorage(KINGDOM_KEY, kingdomState)
+    if (!skipKingdom) loadKeyFromLocalStorage(KINGDOM_KEY, kingdomState)
     loadKeyFromLocalStorage(STATS_KEY, statsState)
   }
   saveAll()
@@ -157,6 +186,7 @@ function loadStateByMerging(state: any, newState: any): void {
         case key === "playedKingdoms":
           target[key] = []
           source[key].forEach((k: any) => {
+            console.log("merging in ", k)
             const x = {
               date: new Date(k.date),
               name: k.name,
