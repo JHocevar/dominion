@@ -2,6 +2,24 @@
 
 <div class="container">
   <div class="item">
+    <h2>12/23/25</h2>
+    <p>New Features</p>
+    <ul>
+      <li>Added QR code import/export for saved kingdoms for sharing</li>
+      <ul>
+        <li>Adds QR code icon on stats page for each kingdom to show a link and QR code</li>
+        <li>Scanning QR code opens /generator page with preloaded kingdom</li>
+      </ul>
+    </ul>
+
+    <p>Fixes</p>
+    <ul>
+      <li>Improved mobile button sizing/spacing</li>
+      <li>Removed a couple more cards from supply (Lantern/Flag)</li>
+    </ul>
+  </div>
+
+  <div class="item">
     <h2>11/21/25</h2>
     <p>New Features</p>
     <ul>
