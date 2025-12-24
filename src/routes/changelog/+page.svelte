@@ -14,6 +14,7 @@
 
     <p>Fixes</p>
     <ul>
+      <li>Fixed cloud saving not syncing stats screen (wasn't merging in cloud config in conflict selection)</li>
       <li>Improved mobile button sizing/spacing</li>
       <li>Removed a couple more cards from supply (Lantern/Flag)</li>
     </ul>
