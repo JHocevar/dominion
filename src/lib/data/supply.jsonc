@@ -4,21 +4,23 @@
     "Copper",
     "Silver",
     "Gold",
-    "Platinum",      // Prosperity
-    "Potion",        // Alchemy
+    "Platinum",       // Prosperity
+    "Potion",         // Alchemy
     "Estate",
     "Duchy",
     "Province",
-    "Colony",        // Prosperity
+    "Colony",         // Prosperity
     "Curse",
-    "Spoils",        // Dark Ages
-    "Plunder",       // Plunder
-    "Bat",           // Nocturne
-    "Wish",          // Nocturne
-    "Horse",         // Menagerie
-    "Key",           // Renaissance
-    "Horn",          // Renaissance
-    "Treasure Chest" // Renaissance
+    "Spoils",         // Dark Ages
+    "Plunder",        // Plunder
+    "Bat",            // Nocturne
+    "Wish",           // Nocturne
+    "Horse",          // Menagerie
+    "Key",            // Renaissance
+    "Horn",           // Renaissance
+    "Treasure Chest", // Renaissance
+    "Lantern",        // Renaissance
+    "Flag"            // Renaissance
   ],
   "nonSupplyCategories": [
     "Event",    // Multiple
