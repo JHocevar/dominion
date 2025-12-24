@@ -44,8 +44,6 @@
     // Need to save kingdom first to get the ID from the database
     await saveKingdomToDb()
 
-    console.log("kingdom id after load is", kingdomState.kingdomId)
-
     try {
 
       const date = new Date()
@@ -67,8 +65,6 @@
       console.error("Error saving kingdom:", e)
     }
   }
-
-  console.log("kingdom id after statsState block", kingdomState.kingdomId)
 
   // Reset / clear kingdom flow
   let showResetConfirm = $state(false)

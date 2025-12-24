@@ -53,11 +53,8 @@ export async function saveKingdomToDb() {
     if (!response.ok) {
       console.error("Failed to save kingdom to database")
     }
-    console.log("saved kingdom, got back from server:", response)
     const data = await response.json()
-    console.log("id is:", data.kingdomId)
     kingdomState.kingdomId = data.kingdomId
-    console.log(kingdomState.kingdomId)
   } catch (error) {
     console.error("Error saving kingdom to database:", error)
   }
@@ -109,10 +106,7 @@ export async function loadAll(skipKingdom: boolean = false): Promise<void> {
         if (!localTimestamp || (remoteTimestamp && remoteTimestamp > localTimestamp)) {
           loadStateByMerging(settingsState, data.settings)
           loadStateByMerging(statsState, data.stats)
-          if (skipKingdom) {
-            console.log('loading kingdom state')
-          } else {
-            console.log('skipping kingdom load')
+          if (!skipKingdom) {
             loadStateByMerging(kingdomState, data.kingdom)
           }
           conflictState.showConflict = false
@@ -186,7 +180,6 @@ function loadStateByMerging(state: any, newState: any): void {
         case key === "playedKingdoms":
           target[key] = []
           source[key].forEach((k: any) => {
-            console.log("merging in ", k)
             const x = {
               date: new Date(k.date),
               name: k.name,

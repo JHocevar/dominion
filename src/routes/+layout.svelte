@@ -53,7 +53,6 @@
   })
 
   onMount(async () => {
-    console.log('hasQueryParamForLoadingKingdom', hasQueryParamForLoadingKingdom)
     await loadAll(hasQueryParamForLoadingKingdom)
   })
 
