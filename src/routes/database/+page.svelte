@@ -180,7 +180,7 @@
 
   @media (max-width: 740px) {
     .btn-add {
-      right:  5rem;
+      right:  6rem;
     }
   }
 
