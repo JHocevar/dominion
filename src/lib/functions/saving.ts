@@ -92,7 +92,7 @@ export async function loadAll(skipKingdom: boolean = false): Promise<void> {
                 timestamp: localTimestamp,
               },
               remote: {
-                settings: data.settings,
+                settings: applyMigrations(data.settings),
                 kingdom: data.kingdom,
                 stats: data.stats,
                 timestamp: remoteTimestamp,
@@ -138,6 +138,32 @@ export async function resolveConflict(choice: "local" | "remote", conflictData: 
   saveAll()
 }
 
+function applyMigrations(state: any): any {
+  if (!state) return state
+
+  // Work on a shallow copy to avoid surprising mutations
+  let s: any = Array.isArray(state) ? [...state] : { ...state }
+
+  // Ensure a version field exists. Newer code expects numeric versions.
+  if (!('version' in s) || typeof s.version !== 'number') {
+    s.version = 1
+  }
+
+  // Example migration: normalize extraCards object -> ensure `prophecy` key exists, remove misspelling `prophesy`.
+  try {
+    if (s.extraCards && typeof s.extraCards === 'object' && !Array.isArray(s.extraCards)) {
+      if ('prophesy' in s.extraCards && !('prophecy' in s.extraCards)) {
+        s.extraCards['prophecy'] = s.extraCards['prophesy']
+        delete s.extraCards['prophesy']
+      }
+    }
+  } catch (e) {
+    console.warn('applyMigrations: failed to normalize extraCards', e)
+  }
+
+  return s
+}
+
 function loadFromLocalStorage(key: string): null | any {
   if (typeof localStorage === "undefined") {
     return null
@@ -149,7 +175,7 @@ function loadFromLocalStorage(key: string): null | any {
   }
 
   try {
-    return JSON.parse(raw)
+    return applyMigrations(JSON.parse(raw))
   } catch (e) {
     console.warn("Error while parsing data from localstorage")
     return null
