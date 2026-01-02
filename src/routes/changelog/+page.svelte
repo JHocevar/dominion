@@ -3,6 +3,11 @@
 <div class="container">
   <div class="item">
     <h2>1/1/25</h2>
+    <p>New Features</p>
+    <ul>
+      <li>Added delete button on cards in kingdom generator</li>
+      <li>Updated event selection to weight sliders instead of confusing numbers</li>
+    </ul>
     <p>Fixes</p>
     <ul>
       <li>Fixed rerolling an event into a trait properly updating associated card</li>

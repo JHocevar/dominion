@@ -4,7 +4,7 @@
   import { kingdomState, type Kingdom } from "$lib/state/kingdom.svelte"
   import { statsState } from "$lib/state/stats.svelte"
   import { onMount } from "svelte"
-  import type { PageProps } from './$types'
+  import type { PageProps } from "./$types"
 
   const { data }: PageProps = $props()
 
@@ -43,7 +43,6 @@
     await saveKingdomToDb()
 
     try {
-
       const date = new Date()
       statsState.playedKingdoms.push({
         date: date,
@@ -74,6 +73,16 @@
     kingdomState.extraMappings = {}
     saveAll()
     showResetConfirm = false
+  }
+
+  function deleteCard(card: any) {
+    kingdomState.cards = kingdomState.cards.filter((c) => c !== card)
+    kingdomState.eventLikeCards = kingdomState.eventLikeCards.filter((c) => c !== card)
+    kingdomState.extraCards = kingdomState.extraCards.filter((c) => c !== card)
+    if (kingdomState.extraMappings[card.Name]) {
+      delete kingdomState.extraMappings[card.Name]
+    }
+    saveAll()
   }
 </script>
 
@@ -135,11 +144,17 @@
     </div>
     {#if kingdomState.cards.includes(card)}
       <div class="right">
+        <button class="delete" onclick={() => deleteCard(card)}>❌</button>
         <button class="reroll" onclick={() => rerollOneCard(card)}>🎲</button>
       </div>
     {:else if kingdomState.eventLikeCards.includes(card)}
       <div class="right">
+        <button class="delete" onclick={() => deleteCard(card)}>❌</button>
         <button class="reroll" onclick={() => rerollOneEventLikeCard(card)}>🎲</button>
+      </div>
+    {:else}
+      <div class="right">
+        <button class="delete" onclick={() => deleteCard(card)}>❌</button>
       </div>
     {/if}
   </div>
@@ -147,8 +162,7 @@
 
 {#if kingdomState.cards.length > 0 || kingdomState.eventLikeCards.length > 0}
   <div>
-    {kingdomState.cards.length} cards, {kingdomState.extraCards.length} extras, {kingdomState.eventLikeCards
-      .length} events
+    {kingdomState.cards.length} cards, {kingdomState.extraCards.length} extras, {kingdomState.eventLikeCards.length} events
   </div>
 {/if}
 
@@ -184,6 +198,16 @@
     font-size: 1.25rem;
     width: 35px;
     height: 35px;
+  }
+
+  .delete {
+    padding: 2px;
+    font-size: 1.1rem;
+    width: 35px;
+    height: 35px;
+    margin-left: 6px;
+    color: #c62828;
+    cursor: pointer;
   }
 
   .wrapper {
@@ -302,7 +326,7 @@
   }
 
   .ally {
-    background: #ada285
+    background: #ada285;
   }
 
   .trait {
