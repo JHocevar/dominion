@@ -14,6 +14,7 @@ html {
   --header-height: 4rem;
 
   font-family: 'Roboto', sans-serif;
+  touch-action: manipulation;
 }
 
 html[data-theme='light'] {
