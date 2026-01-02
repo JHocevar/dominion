@@ -2,6 +2,14 @@
 
 <div class="container">
   <div class="item">
+    <h2>1/1/25</h2>
+    <p>Fixes</p>
+    <ul>
+      <li>Fixed rerolling an event into a trait properly updating associated card</li>
+    </ul>
+  </div>
+
+  <div class="item">
     <h2>12/23/25</h2>
     <p>New Features</p>
     <ul>

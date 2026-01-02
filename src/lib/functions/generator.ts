@@ -136,17 +136,29 @@ export function generateKingdon() {
   }
 
   // Check for trait matching
+  assignTraitMappings()
+
+  kingdomState.cards.sort((cardA, cardB) => cardA.Name.localeCompare(cardB.Name))
+
+  saveAll()
+  return "Generated new kingdom"
+}
+
+function assignTraitMappings() {
+  // First clear all trait mappings just in case. This could be redundant, but better safe
+  for (const [key, value] of Object.entries(kingdomState.extraMappings)) {
+    if (value.includes('trait-')) {
+      delete kingdomState.extraMappings[key]
+    }
+  }
+
+  // Loop through all traits and assign a random kingdom card to each (must be different)
   kingdomState.eventLikeCards
     .filter((card) => card.Types.includes("Trait"))
     .forEach((traitCard) => {
       const chosenCard = getRandomCard(kingdomState.cards.filter((c) => !kingdomState.extraMappings[c.Name]))
       kingdomState.extraMappings[chosenCard.Name] = `trait-${traitCard.Name}`
     })
-
-  kingdomState.cards.sort((cardA, cardB) => cardA.Name.localeCompare(cardB.Name))
-
-  saveAll()
-  return "Generated new kingdom"
 }
 
 function getRandomCard(cards: any[]): any {
@@ -342,6 +354,7 @@ export function rerollOneEventLikeCard(card: Card): void {
 
   if (chosen) {
     kingdomState.eventLikeCards[index] = chosen
+    assignTraitMappings()
     saveAll()
   }
 }
