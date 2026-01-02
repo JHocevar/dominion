@@ -8,10 +8,8 @@
 
   const { data }: PageProps = $props()
 
-  let importedKingdom = false
   onMount(() => {
     if (data?.kingdom) {
-      importedKingdom = true
       kingdomState.cards = data.kingdom.cards
       kingdomState.eventLikeCards = data.kingdom.eventLikeCards
       kingdomState.extraCards = data.kingdom.extraCards
