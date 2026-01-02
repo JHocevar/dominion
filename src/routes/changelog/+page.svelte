@@ -6,6 +6,8 @@
     <p>Fixes</p>
     <ul>
       <li>Fixed rerolling an event into a trait properly updating associated card</li>
+      <li>Fixed prophecies only showing up when Omens are present</li>
+      <li>Fixed rerolling events to first check Ally or Prophecy and replace with same type because of card requirement</li>
     </ul>
   </div>
 

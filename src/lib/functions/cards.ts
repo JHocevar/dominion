@@ -2,6 +2,7 @@ import { parse as csvParse } from "csv-parse/browser/esm/sync"
 import { parse as jsoncParse } from "jsonc-parser"
 import cardsData from "$lib/data/cards.csv?raw"
 import supplyJson from "$lib/data/supply.jsonc?raw"
+import { settingsState } from "$lib/state/settings.svelte"
 
 export type Card = {
   Name: string
@@ -47,6 +48,9 @@ export const nonSupplyCategories: string[] = supply.nonSupplyCategories
 
 // Supply piles with multiple cards in a single stack
 export const specialMultiStackCards: string[] = supply.multiStackCards
+
+// Omen cards that are tied to prophecies being in the game
+export const omenCards: string[] = supply.omenCards
 
 // Modifyer cards like Events that are chosen at random to be added to the game
 export const eventLikeCards: string[] = supply.eventLikeCategories

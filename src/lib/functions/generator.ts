@@ -7,6 +7,7 @@ import {
   loadAllSupplyCards,
   loadAllEventLikeCards,
   loadPlatinumColonyCards,
+  omenCards,
   type Card,
 } from "$lib/functions/cards"
 import drawCardsJson from "$lib/data/draw-cards.jsonc?raw"
@@ -81,57 +82,43 @@ export function generateKingdon() {
     })
   }
 
-  // Check for Liason
-  if (kingdomState.cards.some((card) => card.Types.includes("Liaison"))) {
-    const allies = getAvailableAllies()
-    if (allies.length > 0) {
-      const randomAlly = getRandomCard(allies)
-      kingdomState.eventLikeCards.push(randomAlly)
-    }
-  }
-
-  // Event-like cards
+  // Event-like cards. Liason/Ally -> Omen/Prophecy -> Other -> Check Trait mappings
   if (settingsState.eventLikeCardsMaster.enabled) {
+    assignAllies()
+    assignProphecies()
     const availableEventLikeCards = getAvailableEventLikeCards()
 
     const target = settingsState.eventLikeCardsMaster.amount
-    while (kingdomState.eventLikeCards.length < target && availableEventLikeCards.length > 0) {
-      for (const key of Object.keys(settingsState.eventLikeCards)) {
-        if (kingdomState.eventLikeCards.length >= target) break
-        const cfg = settingsState.eventLikeCards[key]
-        if (!cfg || cfg.enabled === false) continue
 
-        // Ensure we satisfy the configured minimum for this key fully
-        let selectedCardsWithKey = kingdomState.eventLikeCards.filter((card) => card.Types.includes(key)).length
-        while ((cfg.min ?? 0) > selectedCardsWithKey && kingdomState.eventLikeCards.length < target) {
-          const availableWithKey = availableEventLikeCards.filter((card) => card.Types.includes(key))
-          if (availableWithKey.length === 0) break
-          const randomCard = getRandomCard(availableWithKey)
-          availableEventLikeCards.splice(availableEventLikeCards.indexOf(randomCard), 1)
-          kingdomState.eventLikeCards.push(randomCard)
-          selectedCardsWithKey++
-        }
-      }
+    // Use top-level weighted picker
 
-      if (kingdomState.eventLikeCards.length >= target) break
-
-      const candidatePool = availableEventLikeCards.filter((card) => {
-        for (const key of Object.keys(settingsState.eventLikeCards)) {
-          const cfg = settingsState.eventLikeCards[key]
-          if (!cfg || cfg.enabled === false) continue
-          if (card.Types.includes(key) && typeof cfg.max === "number") {
-            const selected = kingdomState.eventLikeCards.filter((c) => c.Types.includes(key)).length
-            if (selected >= cfg.max) return false
-          }
-        }
-        return true
+    // Build list of enabled category keys
+    const enabledKeys = () =>
+      Object.keys(settingsState.eventLikeCards).filter((k) => {
+        const cfg = settingsState.eventLikeCards[k]
+        return !!cfg && cfg.enabled !== false
       })
 
-      if (candidatePool.length === 0) break
+    while (kingdomState.eventLikeCards.length < target && availableEventLikeCards.length > 0) {
+      const keys = enabledKeys()
+      if (keys.length === 0) break
 
-      const randomCard = getRandomCard(candidatePool)
-      availableEventLikeCards.splice(availableEventLikeCards.indexOf(randomCard), 1)
-      kingdomState.eventLikeCards.push(randomCard)
+      const chosenKey = pickWeightedCategory(keys)
+      if (!chosenKey) break
+
+      // pick a random available card that matches the chosen category
+      const pool = availableEventLikeCards.filter((card) => card.Types.includes(chosenKey))
+      let chosenCard = null
+      if (pool.length > 0) {
+        chosenCard = getRandomCard(pool)
+      } else {
+        // fallback: pick any available event-like card
+        chosenCard = getRandomCard(availableEventLikeCards)
+      }
+
+      if (!chosenCard) break
+      availableEventLikeCards.splice(availableEventLikeCards.indexOf(chosenCard), 1)
+      kingdomState.eventLikeCards.push(chosenCard)
     }
   }
 
@@ -144,10 +131,20 @@ export function generateKingdon() {
   return "Generated new kingdom"
 }
 
+function assignAllies() {
+  if (kingdomState.cards.some((card) => card.Types.includes("Liaison"))) {
+    const allies = getAvailableAllies()
+    if (allies.length > 0) {
+      const randomAlly = getRandomCard(allies)
+      kingdomState.eventLikeCards.push(randomAlly)
+    }
+  }
+}
+
 function assignTraitMappings() {
   // First clear all trait mappings just in case. This could be redundant, but better safe
   for (const [key, value] of Object.entries(kingdomState.extraMappings)) {
-    if (value.includes('trait-')) {
+    if (value.includes("trait-")) {
       delete kingdomState.extraMappings[key]
     }
   }
@@ -161,9 +158,39 @@ function assignTraitMappings() {
     })
 }
 
+function assignProphecies() {
+  if (kingdomState.cards.some((card) => card.Types.includes("Omen"))) {
+    const prophecies = getAvailableProphecies()
+    if (prophecies.length > 0) {
+      const randomProphecy = getRandomCard(prophecies)
+      kingdomState.eventLikeCards.push(randomProphecy)
+    }
+  }
+}
+
 function getRandomCard(cards: any[]): any {
   const randomIndex = Math.floor(Math.random() * cards.length)
   return cards[randomIndex]
+}
+
+// Pick a category key from `keys` using the configured weights in `settingsState.eventLikeCards`.
+// Returns the selected key, or null if no keys provided.
+function pickWeightedCategory(keys: string[]): string | null {
+  const items = keys
+    .map((k) => ({ k, w: Number(settingsState.eventLikeCards[k]?.weight ?? 0) }))
+    .filter((it) => it.w >= 0)
+  let total = items.reduce((s, it) => s + it.w, 0)
+  if (items.length === 0) return null
+  if (total <= 0) {
+    items.forEach((it) => (it.w = 1))
+    total = items.length
+  }
+  let r = Math.random() * total
+  for (const it of items) {
+    if (r < it.w) return it.k
+    r -= it.w
+  }
+  return items[items.length - 1].k
 }
 
 function getVillage(cards: Card[]): Card | null {
@@ -229,6 +256,26 @@ export function getAvailableCards(): Card[] {
     allCards = allCards.filter((card) => !card.Types.includes("Attack"))
   }
 
+  // Remove Omen cards if Prophecy is disabled
+  if (
+    settingsState.eventLikeCardsMaster.amount === 0 ||
+    settingsState.eventLikeCards["Prophecy"]?.enabled === false ||
+    settingsState.eventLikeCards["Prophecy"]?.weight === 0 ||
+    enabledSets.every((set) => set !== "Rising Sun")
+  ) {
+    allCards = allCards.filter((card) => !card.Types.includes("Omen"))
+  }
+
+  // Remove Liason cards if Ally is disabled
+  if (
+    settingsState.eventLikeCardsMaster.amount === 0 ||
+    settingsState.eventLikeCards["Ally"]?.enabled === false ||
+    settingsState.eventLikeCards["Ally"]?.weight === 0 ||
+    enabledSets.every((set) => set !== "Allies")
+  ) {
+    allCards = allCards.filter((card) => !card.Types.includes("Liason"))
+  }
+
   return allCards.filter(
     (card) =>
       enabledSets.includes(card.Set) &&
@@ -256,9 +303,22 @@ export function getAvailableEventLikeCards(): Card[] {
 
 function getAvailableAllies(): Card[] {
   const allCards = loadAllCards()
-  return allCards
-    .filter((card) => card.Types.includes("Ally"))
-    .filter((card) => kingdomState.extraCards.every((c) => c.Name !== card.Name))
+  return allCards.filter(
+    (card) =>
+      card.Types.includes("Ally") &&
+      !settingsState.bannedCards.includes(card.Name) &&
+      kingdomState.extraCards.every((c) => c.Name !== card.Name)
+  )
+}
+
+function getAvailableProphecies(): Card[] {
+  const allCards = loadAllCards()
+  return allCards.filter(
+    (card) =>
+      card.Types.includes("Prophecy") &&
+      !settingsState.bannedCards.includes(card.Name) &&
+      kingdomState.extraCards.every((c) => c.Name !== card.Name)
+  )
 }
 
 function usePlatinumColony(kingdomCards: Card[]): boolean {
@@ -303,54 +363,44 @@ export function rerollOneEventLikeCard(card: Card): void {
     }
   }
 
-  // Build candidate pool excluding the old card
-  let candidates = getAvailableEventLikeCards().filter((c) => c.Name !== oldCard.Name)
-
-  // Compute counts after removing the old card (simulate removal)
-  const simulatedCounts: Record<string, number> = {}
-  for (const kv of Object.keys(settingsState.eventLikeCards)) simulatedCounts[kv] = 0
-  kingdomState.eventLikeCards.forEach((c, i) => {
-    if (i === index) return // skip the card being replaced
-    for (const key of Object.keys(settingsState.eventLikeCards)) {
-      if (c.Types.includes(key)) simulatedCounts[key] = (simulatedCounts[key] ?? 0) + 1
+  // First check if card is ally or prophecy and handle those specially
+  if (oldCard.Types.includes("Ally")) {
+    const availableAllies = getAvailableAllies().filter((c) => c.Name !== oldCard.Name)
+    if (availableAllies.length > 0) {
+      const newAlly = getRandomCard(availableAllies)
+      kingdomState.eventLikeCards[index] = newAlly
+      saveAll()
     }
-  })
-
-  // Helper to check if adding a candidate would violate any max constraints
-  const violatesMax = (candidate: Card) => {
-    for (const key of Object.keys(settingsState.eventLikeCards)) {
-      const cfg = settingsState.eventLikeCards[key]
-      if (!cfg || cfg.enabled === false) continue
-      if (candidate.Types.includes(key) && typeof cfg.max === "number") {
-        const wouldBe = (simulatedCounts[key] ?? 0) + 1
-        if (wouldBe > cfg.max) return true
-      }
+    return
+  } else if (oldCard.Types.includes("Prophecy")) {
+    const availableProphecies = getAvailableProphecies().filter((c) => c.Name !== oldCard.Name)
+    if (availableProphecies.length > 0) {
+      const newProphecy = getRandomCard(availableProphecies)
+      kingdomState.eventLikeCards[index] = newProphecy
+      saveAll()
     }
-    return false
+    return
   }
 
-  // First, prioritize candidates that help satisfy any mins that would otherwise be violated
-  const needyKeys = Object.keys(settingsState.eventLikeCards).filter((k) => {
+  // Build candidate pool excluding the old card
+  let candidates = getAvailableEventLikeCards().filter((c) => c.Name !== oldCard.Name)
+  if (candidates.length === 0) return
+
+  // Use top-level weighted picker
+
+  const enabledKeys = Object.keys(settingsState.eventLikeCards).filter((k) => {
     const cfg = settingsState.eventLikeCards[k]
-    if (!cfg || cfg.enabled === false) return false
-    const min = cfg.min ?? 0
-    return (simulatedCounts[k] ?? 0) < min
+    return !!cfg && cfg.enabled !== false
   })
 
   let chosen: Card | null = null
-  if (needyKeys.length > 0) {
-    const preferred = candidates.filter((c) => needyKeys.some((k) => c.Types.includes(k)) && !violatesMax(c))
-    if (preferred.length > 0) chosen = getRandomCard(preferred)
+  const chosenKey = pickWeightedCategory(enabledKeys)
+  if (chosenKey) {
+    const pool = candidates.filter((c) => c.Types.includes(chosenKey))
+    if (pool.length > 0) chosen = getRandomCard(pool)
   }
 
-  // If no preferred candidate, pick any that doesn't violate max
-  if (!chosen) {
-    const ok = candidates.filter((c) => !violatesMax(c))
-    if (ok.length > 0) chosen = getRandomCard(ok)
-  }
-
-  // As a last resort, pick any candidate (may violate maxs)
-  if (!chosen && candidates.length > 0) chosen = getRandomCard(candidates)
+  if (!chosen) chosen = getRandomCard(candidates)
 
   if (chosen) {
     kingdomState.eventLikeCards[index] = chosen

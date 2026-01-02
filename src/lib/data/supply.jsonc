@@ -52,7 +52,11 @@
     "Landmark", // Empires
     "Project",  // Renaissance
     "Way",      // Menagerie
-    "Trait",    // Plunder
-    "Prophecy"  // Rising Sun
+    "Trait"     // Plunder
+
+    // Note that Ally and Prophecy fit this category
+    // but are chosen only if their corresponding card type is in the kingdom
+    // "Ally",     // Allies
+    // "Prophecy"  // Rising Sun
   ]
 }

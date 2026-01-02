@@ -14,7 +14,7 @@ type SettingsState = {
   hideLoginIcon: boolean
   hideThemeIcon: boolean
   eventLikeCardsMaster: { enabled: boolean; amount: number }
-  eventLikeCards: Record<string, { enabled: boolean; min: number; max: number }>
+  eventLikeCards: Record<string, { enabled: boolean; weight: number }>
 }
 
 type Set = {
@@ -204,33 +204,23 @@ export const settingsState = $state<SettingsState>({
   eventLikeCards: {
     Event: {
       enabled: true,
-      min: 0,
-      max: 20,
+      weight: 50,
     },
     Landmark: {
       enabled: true,
-      min: 0,
-      max: 20,
+      weight: 50,
     },
     Project: {
       enabled: true,
-      min: 0,
-      max: 20,
+      weight: 50,
     },
     Way: {
       enabled: true,
-      min: 0,
-      max: 20,
+      weight: 50,
     },
     Trait: {
       enabled: true,
-      min: 0,
-      max: 20,
-    },
-    Prophecy: {
-      enabled: true,
-      min: 0,
-      max: 20,
+      weight: 50,
     },
   },
 })

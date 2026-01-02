@@ -262,10 +262,21 @@
   </div>
 </div>
 
-<div class="item">
+<!-- Events -->
+<div class="item column">
   <div class="event-total">
-    <div style="width: 100%">Events</div>
-    <div style="display: flex; flex-direction: column; align-items: center; gap: .35rem;">
+    <span>Events</span>
+    <div style="display: flex; flex-direction: row; align-items: center; gap: .35rem;">
+      <input
+      class="input"
+      id="event-like-cards-amount"
+      disabled={!settingsState.eventLikeCardsMaster.enabled}
+      type="number"
+      min="0"
+      max="20"
+      onchange={saveAll}
+      bind:value={settingsState.eventLikeCardsMaster.amount}
+      />
       <button
         class="btn btn-primary btn-settings"
         class:enabled={settingsState.eventLikeCardsMaster.enabled}
@@ -276,19 +287,7 @@
       >
         {settingsState.eventLikeCardsMaster.enabled ? "Enabled" : "Disabled"}
       </button>
-      <input
-        class="input event-input"
-        id="event-like-cards-amount"
-        disabled={!settingsState.eventLikeCardsMaster.enabled}
-        type="number"
-        min="0"
-        max="20"
-        onchange={saveAll}
-        bind:value={settingsState.eventLikeCardsMaster.amount}
-      />
-      <div style="font-size: var(--font-size-xs);">Total</div>
     </div>
-    <div style="font-size: var(--font-size-sm);">Min / Max</div>
   </div>
   <div class="event-box-outer">
     {#each Object.entries(settingsState.eventLikeCards) as [key, _]}
@@ -303,29 +302,17 @@
         >
           {key.charAt(0).toUpperCase() + key.slice(1)}s
         </button>
-        <div style="display: flex; flex-direction: row; justify-content: center;">
-          <input
-            class="input event-input"
-            id={`weight-${key}`}
-            disabled={!settingsState.eventLikeCards[key].enabled}
-            type="number"
-            min="0"
-            max="20"
-            onchange={saveAll}
-            bind:value={settingsState.eventLikeCards[key].min}
-          />
-          <div style="margin: 0 .2rem;">/</div>
-          <input
-            class="input event-input"
-            id={`weight-${key}`}
-            disabled={!settingsState.eventLikeCards[key].enabled}
-            type="number"
-            min="0"
-            max="20"
-            onchange={saveAll}
-            bind:value={settingsState.eventLikeCards[key].max}
-          />
-        </div>
+        <span>Less</span>
+        <input
+          id={`weight-${key}`}
+          disabled={!settingsState.eventLikeCards[key].enabled}
+          type="range"
+          min="0"
+          max="100"
+          onchange={saveAll}
+          bind:value={settingsState.eventLikeCards[key].weight}
+        />
+        <span>More</span>
       </div>
     {/each}
   </div>
@@ -396,21 +383,22 @@
 
   .event-box-outer {
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
+    width: 100%;
     gap: 1rem;
     padding: 1rem 0;
-    justify-content: space-evenly;
+    justify-content: space-between;
   }
 
   .event-total {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     justify-content: space-between;
     flex-grow: 1;
     align-self: stretch;
     min-height: 100%;
-    max-width: 20%;
   }
 
   .header-container {
@@ -455,8 +443,8 @@
   }
 
   .btn-events {
-    min-width: 80%;
     width: 100%;
+    max-width: 120px;
     background-color: #ff4444;
     margin-bottom: 0.5rem;
   }
@@ -482,12 +470,64 @@
   }
 
   .event-box {
-    width: 27%;
-    max-width: 27%;
+    width: 100%;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: row;
     align-items: center;
+    gap: 0.5rem;
+  }
+
+  .event-box input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    max-width: none;
+    flex: 1 1 auto;
+    margin: 0 5px;
+    padding: 0;
+    box-sizing: border-box;
+    background: transparent;
+    accent-color: #4f9ce6;
+  }
+
+  .event-box input[type="range"]::-webkit-slider-runnable-track {
+    height: 6px;
+    background: linear-gradient(90deg, #eaf4ff 0%, #eaf4ff var(--progress, 50%), #f2f6fb var(--progress, 50%), #f2f6fb 100%);
+    border-radius: 3px;
+  }
+
+  .event-box input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    margin-top: -4px;
+    background: #4f9ce6;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  }
+
+  .event-box input[type="range"]::-moz-range-track {
+    height: 6px;
+    background: #eee;
+    border-radius: 3px;
+  }
+
+  .event-box input[type="range"]::-moz-range-progress {
+    background: #4f9ce6;
+    height: 6px;
+    border-radius: 3px;
+  }
+
+  .event-box input[type="range"]::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    background: #4f9ce6;
+    border-radius: 50%;
+    border: 2px solid #fff;
+  }
+
+  .event-box input[type="range"][disabled] {
+    opacity: 0.5;
   }
 
   .row {
