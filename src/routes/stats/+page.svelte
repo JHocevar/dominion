@@ -128,6 +128,10 @@
   </div>
 </div>
 
+<div class="button-container">
+  <button class="btn btn-primary btn-kingdom"><a href="/generator">View Kingdom</a></button>
+</div>
+
 {#each statsState.playedKingdoms as kingdom, index}
   <div class="item">
     <div class="item-body">
@@ -290,6 +294,24 @@
     /* keep existing .btn behaviour but ensure smaller on this page */
     padding: 0.45rem 0.7rem;
     font-size: 0.95rem;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .button-container {
+    width: var(--card-width);
+    height: 0;
+    position: relative;
+    padding: 0 0.5rem;
+  }
+
+  .btn-kingdom {
+    position: absolute;
+    right: 0;
+    bottom: 1rem;
   }
 
   .item {

@@ -3,6 +3,7 @@
   import { saveAll, saveKingdomToDb } from "$lib/functions/saving"
   import { kingdomState, type Kingdom } from "$lib/state/kingdom.svelte"
   import { statsState } from "$lib/state/stats.svelte"
+  import { settingsState } from "$lib/state/settings.svelte"
   import { onMount } from "svelte"
   import type { PageProps } from "./$types"
 
@@ -108,7 +109,11 @@
     New Kingdom
   </button>
 
-  <div class="link-to-settings"><a href="/settings">⚙️</a></div>
+  <div class="top-links">
+    <a class="icon db" href="/database" aria-label="Database" title="Database">🗄️</a>
+    <a class="icon stats" href="/stats" aria-label="Saved kingdoms" title="Saved Kingdoms">📊</a>
+    <a class="icon settings" href="/settings" aria-label="Settings" title="Settings">⚙️</a>
+  </div>
 </div>
 
 {#if showResetConfirm}
@@ -144,17 +149,23 @@
     </div>
     {#if kingdomState.cards.includes(card)}
       <div class="right">
-        <button class="delete" onclick={() => deleteCard(card)}>❌</button>
+        {#if !settingsState.hideDeleteIcon}
+          <button class="delete" onclick={() => deleteCard(card)}>❌</button>
+        {/if}
         <button class="reroll" onclick={() => rerollOneCard(card)}>🎲</button>
       </div>
     {:else if kingdomState.eventLikeCards.includes(card)}
       <div class="right">
-        <button class="delete" onclick={() => deleteCard(card)}>❌</button>
+        {#if !settingsState.hideDeleteIcon}
+          <button class="delete" onclick={() => deleteCard(card)}>❌</button>
+        {/if}
         <button class="reroll" onclick={() => rerollOneEventLikeCard(card)}>🎲</button>
       </div>
     {:else}
       <div class="right">
-        <button class="delete" onclick={() => deleteCard(card)}>❌</button>
+        {#if !settingsState.hideDeleteIcon}
+          <button class="delete" onclick={() => deleteCard(card)}>❌</button>
+        {/if}
       </div>
     {/if}
   </div>
@@ -216,11 +227,32 @@
     text-align: center;
   }
 
-  .link-to-settings {
+  .top-links {
     position: absolute;
     right: 0;
     top: 0;
+    display: flex;
+    gap: .8rem;
+    align-items: center;
+  }
+
+  .top-links .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
     font-size: var(--font-size-xl);
+    text-decoration: none;
+    color: var(--text);
+    background: transparent;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+  }
+
+  .top-links .icon:hover {
+    background: var(--bg-lighter);
   }
 
   .clear-button {

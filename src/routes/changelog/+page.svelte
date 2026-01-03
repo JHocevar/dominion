@@ -2,6 +2,15 @@
 
 <div class="container">
   <div class="item">
+    <h2>1/2/25</h2>
+    <p>New Features</p>
+    <ul>
+      <li>Added hide button for delete X button</li>
+      <li>Added more navigation buttons to link between pages</li>
+    </ul>
+  </div>
+
+  <div class="item">
     <h2>1/1/25</h2>
     <p>New Features</p>
     <ul>

@@ -370,6 +370,21 @@
   </div>
 </div>
 
+<div class="item">
+  <span>Hide delete icon on kingdom cards</span>
+  <div>
+    <button
+      class="btn btn-primary btn-settings"
+      class:enabled={settingsState.hideDeleteIcon}
+      onclick={() => {
+        settingsState.hideDeleteIcon = !settingsState.hideDeleteIcon
+      }}
+    >
+      {settingsState.hideDeleteIcon ? "Hidden" : "Visible"}
+    </button>
+  </div>
+</div>
+
 <style>
   a {
     text-decoration: none;

@@ -13,6 +13,7 @@ type SettingsState = {
   bannedCards: string[]
   hideLoginIcon: boolean
   hideThemeIcon: boolean
+  hideDeleteIcon: boolean
   eventLikeCardsMaster: { enabled: boolean; amount: number }
   eventLikeCards: Record<string, { enabled: boolean; weight: number }>
 }
@@ -197,6 +198,7 @@ export const settingsState = $state<SettingsState>({
   bannedCards: [],
   hideLoginIcon: false,
   hideThemeIcon: false,
+  hideDeleteIcon: true,
   eventLikeCardsMaster: {
     enabled: true,
     amount: 2

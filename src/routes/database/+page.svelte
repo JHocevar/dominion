@@ -14,10 +14,7 @@
 
   const toggleBanned = (card: Card) => {
     if (settingsState.bannedCards.includes(card.Name)) {
-      settingsState.bannedCards.splice(
-        settingsState.bannedCards.indexOf(card.Name),
-        1,
-      )
+      settingsState.bannedCards.splice(settingsState.bannedCards.indexOf(card.Name), 1)
     } else {
       settingsState.bannedCards.push(card.Name)
     }
@@ -28,21 +25,15 @@
   let cards: Card[] = $derived.by(() => {
     let cards = allCards
     if (bannedOnly) {
-      cards = cards.filter((card) =>
-        settingsState.bannedCards.includes(card.Name),
-      )
+      cards = cards.filter((card) => settingsState.bannedCards.includes(card.Name))
     }
     if (availableOnly) {
       const availableCards = getAvailableCards()
-      cards = cards.filter((card) =>
-        availableCards.some((c) => c.Name == card.Name),
-      )
+      cards = cards.filter((card) => availableCards.some((c) => c.Name == card.Name))
     }
     if (supplyOnly) {
       const supplyOnly = loadAllSupplyCards()
-      cards = cards.filter((card) =>
-        supplyOnly.some((c) => c.Name == card.Name),
-      )
+      cards = cards.filter((card) => supplyOnly.some((c) => c.Name == card.Name))
     }
     return cards
   })
@@ -66,33 +57,22 @@
 
 <div class="filter-row">
   <label for="card-filter" class="filter-label">Search:</label>
-  <input
-    id="card-filter"
-    class="input"
-    bind:value={filter}
-    placeholder="Search cards by name"
-  />
+  <input id="card-filter" class="input" bind:value={filter} placeholder="Search cards by name" />
 </div>
 
 <div class="filter-row">
-  <button
-    class="btn"
-    class:on={bannedOnly}
-    onclick={() => (bannedOnly = !bannedOnly)}>Banned</button
-  >
-  <button
-    class="btn"
-    class:on={availableOnly}
-    onclick={() => (availableOnly = !availableOnly)}>Available</button
-  >
-  <button
-    class="btn"
-    class:on={supplyOnly}
-    onclick={() => (supplyOnly = !supplyOnly)}>Supply</button
-  >
+  <button class="btn" class:on={bannedOnly} onclick={() => (bannedOnly = !bannedOnly)}>Banned</button>
+  <button class="btn" class:on={availableOnly} onclick={() => (availableOnly = !availableOnly)}>Available</button>
+  <button class="btn" class:on={supplyOnly} onclick={() => (supplyOnly = !supplyOnly)}>Supply</button>
 </div>
 
-<div class="filter-row">{cards.length}/{allCards.length} cards shown</div>
+<div class="filter-row">
+  {cards.length}/{allCards.length} cards shown
+</div>
+
+<div class="button-container">
+  <button class="btn btn-primary btn-kingdom"><a href="/generator">View Kingdom</a></button>
+</div>
 
 {#each cards as card}
   {#if card.Name.toLowerCase().includes(filter.toLowerCase())}
@@ -111,7 +91,8 @@
       <div>{card.Text}</div>
       <button
         class="btn btn-primary btn-add"
-        class:banned={kingdomState.cards.some(c => c.Name === card.Name) || kingdomState.eventLikeCards.some(c => c.Name === card.Name)}
+        class:banned={kingdomState.cards.some((c) => c.Name === card.Name) ||
+          kingdomState.eventLikeCards.some((c) => c.Name === card.Name)}
         onclick={() => addCardToKingdom(card)}
       >
         Add to Kingdom
@@ -137,6 +118,11 @@
     margin: 0 0 0.5rem 0;
   }
 
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
   .card {
     border: 1px solid #ccc;
     padding: var(--spacing-base);
@@ -160,6 +146,7 @@
     align-items: center;
     gap: 0.5rem;
     margin-bottom: 1rem;
+    position: relative;
   }
 
   .filter-label {
@@ -178,9 +165,22 @@
     right: 7rem;
   }
 
+  .button-container {
+    width: var(--card-width);
+    height: 0;
+    position: relative;
+    padding: 0 var(--spacing-base);
+  }
+
+  .btn-kingdom {
+    position: absolute;
+    right: 0;
+    bottom: 1rem;
+  }
+
   @media (max-width: 740px) {
     .btn-add {
-      right:  6rem;
+      right: 6rem;
     }
   }
 
@@ -253,12 +253,6 @@
   }
 
   .victory.reaction.duration {
-    background: linear-gradient(
-      45deg,
-      lightgreen 33%,
-      steelblue 34%,
-      steelblue 66%,
-      orange 67%
-    );
+    background: linear-gradient(45deg, lightgreen 33%, steelblue 34%, steelblue 66%, orange 67%);
   }
 </style>
